@@ -5,7 +5,7 @@
       <!-- Logo -->
       <Link href="/" class="navbar-logo">
         <span class="logo-kanji">阿</span>
-        <span class="logo-text">ARUNIKA</span>
+        <span class="logo-text">DARMA MIZUKI</span>
         <span class="logo-sub">RYOKA</span>
       </Link>
 
@@ -94,8 +94,8 @@
       <div v-if="logoutSuccess" class="fullscreen-loading">
         <div class="loading-content">
           <div class="loading-logo-kanji">阿</div>
-          <div class="loading-logo-text">ARUNIKA RYOKA</div>
-          <div class="spinner"></div>
+          <div class="loading-logo-text">DARMA MIZUKI</div>
+          <div class="loading-line"></div>
           <p style="margin-top: 1rem; color: var(--color-sumi-600); font-family: 'Inter', sans-serif; font-size: 0.9rem;">Keluar dari sistem...</p>
         </div>
       </div>
@@ -229,10 +229,16 @@ const handleLogout = () => {
 .hamburger span.open:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 .mobile-drawer {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
   background: rgba(253,250,245,0.98);
   backdrop-filter: blur(16px);
   border-top: 1px solid rgba(201,168,76,0.2);
   padding: 0.5rem 0;
+  box-shadow: 0 10px 30px rgba(26,26,46,0.1);
+  transform-origin: top;
 }
 .mobile-link {
   display:block; padding: 0.85rem 1.5rem;
@@ -244,8 +250,8 @@ const handleLogout = () => {
 }
 .mobile-link:hover { background: rgba(201,168,76,0.06); color: var(--color-beni-600); }
 
-.drawer-enter-active, .drawer-leave-active { transition: all 0.35s ease; }
-.drawer-enter-from, .drawer-leave-to { opacity:0; transform: translateY(-12px); }
+.drawer-enter-active, .drawer-leave-active { transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+.drawer-enter-from, .drawer-leave-to { opacity:0; transform: translateY(-10px) scaleY(0.95); }
 
 .user-greeting-area {
   display: flex;
@@ -340,16 +346,29 @@ const handleLogout = () => {
   letter-spacing: 0.2em;
   color: var(--color-sumi-800);
 }
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(201, 168, 76, 0.3);
-  border-top-color: var(--color-kin-500);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.loading-line {
+  width: 140px;
+  height: 2px;
+  background: rgba(201, 168, 76, 0.2);
+  position: relative;
+  overflow: hidden;
   margin-top: 1rem;
+  border-radius: 2px;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+.loading-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 40%;
+  background: var(--color-kin-500);
+  animation: sweep 1.5s ease-in-out infinite;
+  border-radius: 2px;
+}
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(150%); }
+  100% { transform: translateX(-100%); }
+}
 .fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

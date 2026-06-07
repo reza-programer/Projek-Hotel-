@@ -68,7 +68,7 @@
             </div>
             <div class="header-status-indicator">
               <span class="status-dot green"></span>
-              <span class="status-text">Arunika Club Member</span>
+              <span class="status-text">Darma Mizuki Club Member</span>
             </div>
           </header>
 
@@ -110,7 +110,7 @@
           <div class="no-chat-selected">
             <div class="zen-card">
               <div class="zen-symbol">阿</div>
-              <h2 class="zen-title">Layanan Concierge Arunika</h2>
+              <h2 class="zen-title">Layanan Concierge Darma Mizuki</h2>
               <p class="zen-text">Pilih salah satu percakapan tamu dari panel sebelah kiri untuk memulai pelayanan virtual Omotenashi.</p>
               <div class="stats-row">
                 <div class="stat-box">
@@ -211,7 +211,7 @@ const activeUser = computed(() => {
   return {
     id: thread.userId,
     name: thread.userName,
-    email: firstUserMsg ? firstUserMsg.userName.toLowerCase().replace(/\s+/g, '') + '@email.com' : 'tamu@arunikaryoka.com'
+    email: firstUserMsg ? firstUserMsg.userName.toLowerCase().replace(/\s+/g, '') + '@email.com' : 'tamu@darmamizuki.com'
   }
 })
 

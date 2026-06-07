@@ -28,13 +28,13 @@
             <div class="membership-badge">
               <div class="mb-icon">阿</div>
               <div class="mb-details">
-                <div class="mb-title">Arunika Club Member</div>
+                <div class="mb-title">Darma Mizuki Club Member</div>
                 <div class="mb-tier">Tier: <strong>Gold (Kiku)</strong></div>
               </div>
             </div>
 
             <div class="points-section">
-              <div class="pt-label">Arunika Zen Points</div>
+              <div class="pt-label">Darma Mizuki Zen Points</div>
               <div class="pt-value">12,450 <span>pts</span></div>
               <p class="pt-desc">Dapat ditukarkan dengan Spa Tradisional atau Upacara Minum Teh.</p>
             </div>
@@ -127,7 +127,7 @@ import AppLayout from '@/Components/Layout/AppLayout.vue'
 defineOptions({ layout: AppLayout })
 
 const guestName = ref('Tamu Premium')
-const guestEmail = ref('tamu@arunikaryoka.com')
+const guestEmail = ref('tamu@darmamizuki.com')
 const editMode = ref(false)
 
 onMounted(() => {
@@ -135,7 +135,7 @@ onMounted(() => {
   if (storedUser) {
     const user = JSON.parse(storedUser)
     guestName.value = user.name
-    guestEmail.value = user.email || 'tamu@arunikaryoka.com'
+    guestEmail.value = user.email || 'tamu@darmamizuki.com'
   }
 })
 </script>

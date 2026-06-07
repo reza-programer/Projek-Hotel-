@@ -27,17 +27,22 @@
               <div class="selected-room-type">{{ form.room.type }}</div>
               <div class="selected-room-name">{{ form.room.name }}</div>
               <div class="selected-room-jp">{{ form.room.nameJP }}</div>
-              <div class="selected-room-price">{{ formatCurrency(form.room.price) }}/malam</div>
+              <div class="selected-room-price">
+                <span v-if="form.room.isPromoActive && form.room.discountPercentage > 0" style="text-decoration: line-through; opacity: 0.6; font-size: 0.8rem; margin-right: 0.4rem; color: var(--color-sumi-600);">
+                  {{ formatCurrency(form.room.price) }}
+                </span>
+                {{ formatCurrency(currentPrice) }}/malam
+              </div>
             </div>
           </div>
           <div class="form-grid">
             <div>
               <label class="label-zen">Tanggal Check-In ✦</label>
-              <DatePicker v-model="form.checkIn" :min="today" required />
+              <DatePicker v-model="form.checkIn" :min="today" :disabled-dates="unavailableDates" required />
             </div>
             <div>
               <label class="label-zen">Tanggal Check-Out ✦</label>
-              <DatePicker v-model="form.checkOut" :min="form.checkIn || today" required />
+              <DatePicker v-model="form.checkOut" :min="form.checkIn || today" :disabled-dates="unavailableDates" required />
             </div>
           </div>
           <div class="form-grid">
@@ -103,6 +108,7 @@
             <div>
               <label class="label-zen">Waktu Perkiraan Tiba</label>
               <input type="time" class="input-zen" v-model="form.arrivalTime"/>
+              <div style="font-size: 0.7rem; color: var(--color-sumi-500); margin-top: 0.3rem;">Waktu check-in standar: 14:00</div>
             </div>
           </div>
           <div>
@@ -127,8 +133,8 @@
             <div class="divider-ink" style="margin:1rem 0;"/>
             <div class="confirm-section-title">Detail Kunjungan</div>
             <div class="confirm-details-grid">
-              <div class="confirm-detail"><span class="cd-label">Check-In</span><span class="cd-val">{{ form.checkIn || '-' }}</span></div>
-              <div class="confirm-detail"><span class="cd-label">Check-Out</span><span class="cd-val">{{ form.checkOut || '-' }}</span></div>
+              <div class="confirm-detail"><span class="cd-label">Check-In</span><span class="cd-val">{{ form.checkIn || '-' }} <span style="font-size:0.75em; color:var(--color-sumi-500)">(14:00)</span></span></div>
+              <div class="confirm-detail"><span class="cd-label">Check-Out</span><span class="cd-val">{{ form.checkOut || '-' }} <span style="font-size:0.75em; color:var(--color-sumi-500)">(12:00)</span></span></div>
               <div class="confirm-detail"><span class="cd-label">Durasi</span><span class="cd-val">{{ nights }} Malam</span></div>
               <div class="confirm-detail"><span class="cd-label">Tamu</span><span class="cd-val">{{ form.adults }} Dewasa{{ form.children ? `, ${form.children} Anak` : '' }}</span></div>
             </div>
@@ -147,7 +153,7 @@
             </div>
             <div class="terms-row">
               <input type="checkbox" id="terms" v-model="form.agreeTerms"/>
-              <label for="terms" class="terms-label">Saya menyetujui <a href="#" class="terms-link">Syarat & Ketentuan</a> serta <a href="#" class="terms-link">Kebijakan Pembatalan</a> Miyabi Hotel.</label>
+              <label for="terms" class="terms-label">Saya menyetujui <a href="#" class="terms-link">Syarat & Ketentuan</a> serta <a href="#" class="terms-link">Kebijakan Pembatalan</a> Darma Mizuki.</label>
             </div>
           </div>
         </div>
@@ -161,11 +167,16 @@
           <button v-if="currentStep<3" class="btn-vermillion" @click="currentStep++" :disabled="!canNext">
             Lanjutkan →
           </button>
-          <Link v-if="currentStep===3" href="/booking/pembayaran"
+          <div v-if="$page.props.errors.room" class="error-alert" style="margin-bottom:1rem; padding:1rem; background:rgba(155,35,53,0.1); border:1px solid var(--color-beni-600); color:var(--color-beni-600); border-radius:4px; font-size:0.85rem;">
+            <SvgIcon name="warning" width="16" height="16" style="margin-right:0.5rem; vertical-align:middle;"/>
+            {{ $page.props.errors.room }}
+          </div>
+
+          <button v-if="currentStep===3" @click="submitBooking"
             class="btn-vermillion"
-            :class="{ 'btn-disabled': !form.agreeTerms }">
-            Konfirmasi & Bayar
-          </Link>
+            :disabled="!form.agreeTerms || submitting">
+            {{ submitting ? 'Memproses...' : 'Konfirmasi & Bayar' }}
+          </button>
         </div>
       </div>
 
@@ -178,19 +189,19 @@
           <div class="summary-room-jp">{{ form.room.nameJP }}</div>
           <div class="summary-dates" v-if="form.checkIn && form.checkOut">
             <div class="summary-date-item">
-              <span class="sd-label">Check-In</span><span class="sd-val">{{ form.checkIn }}</span>
+              <span class="sd-label">Check-In</span><span class="sd-val">{{ form.checkIn }} <br><span style="font-size:0.75rem; color:var(--color-sumi-600); font-weight:normal;">Mulai 14:00</span></span>
             </div>
             <div class="summary-date-sep">→</div>
             <div class="summary-date-item">
-              <span class="sd-label">Check-Out</span><span class="sd-val">{{ form.checkOut }}</span>
+              <span class="sd-label">Check-Out</span><span class="sd-val">{{ form.checkOut }} <br><span style="font-size:0.75rem; color:var(--color-sumi-600); font-weight:normal;">Maks 12:00</span></span>
             </div>
           </div>
           <div class="summary-nights" v-if="nights>0">{{ nights }} Malam · {{ form.adults+form.children }} Tamu</div>
           <div class="divider-ink" style="margin:0.75rem 0;"/>
-          <div class="summary-price-row"><span>Harga Kamar</span><span>{{ formatCurrency(form.room.price) }}/mlm</span></div>
-          <div class="summary-price-row" v-if="nights>0"><span>Subtotal ({{ nights }} mlm)</span><span>{{ formatCurrency(form.room.price * nights) }}</span></div>
-          <div class="summary-price-row"><span>Pajak (11%)</span><span>{{ nights>0 ? formatCurrency(Math.round(form.room.price*nights*0.11)) : '-' }}</span></div>
-          <div class="summary-price-row"><span>Layanan (5%)</span><span>{{ nights>0 ? formatCurrency(Math.round(form.room.price*nights*0.05)) : '-' }}</span></div>
+          <div class="summary-price-row"><span>Harga Kamar</span><span>{{ formatCurrency(currentPrice) }}/mlm</span></div>
+          <div class="summary-price-row" v-if="nights>0"><span>Subtotal ({{ nights }} mlm)</span><span>{{ formatCurrency(currentPrice * nights) }}</span></div>
+          <div class="summary-price-row"><span>Pajak (11%)</span><span>{{ nights>0 ? formatCurrency(Math.round(currentPrice*nights*0.11)) : '-' }}</span></div>
+          <div class="summary-price-row"><span>Layanan (5%)</span><span>{{ nights>0 ? formatCurrency(Math.round(currentPrice*nights*0.05)) : '-' }}</span></div>
           <div class="summary-total-row">
             <span>Total Pembayaran</span>
             <span>{{ nights>0 ? formatCurrency(totalPrice) : '-' }}</span>
@@ -205,8 +216,8 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { ref, computed, watch, onMounted } from 'vue'
+import { Link, router } from '@inertiajs/vue3'
 import AppLayout from '@/Components/Layout/AppLayout.vue'
 import { formatCurrency } from '@/data/mockData'
 import { rooms } from '@/data/roomsStore'
@@ -216,6 +227,7 @@ defineOptions({ layout: AppLayout })
 
 const today = new Date().toISOString().split('T')[0]
 const currentStep = ref(1)
+const submitting = ref(false)
 
 const form = ref({
   room: rooms.value[0],
@@ -226,6 +238,25 @@ const form = ref({
   country: 'ID', arrivalTime: '14:00',
   notes: '', agreeTerms: false,
 })
+
+const unavailableDates = ref([])
+
+const fetchUnavailableDates = async () => {
+  if (!form.value.room || !form.value.room.id) return
+  try {
+    const res = await fetch(`/api/kamar/${form.value.room.id}/tanggal-penuh`)
+    if (res.ok) {
+      unavailableDates.value = await res.json()
+    }
+  } catch (e) {
+    console.error('Failed to fetch unavailable dates', e)
+  }
+}
+
+watch(() => form.value.room, () => {
+  fetchUnavailableDates()
+  // Opsional: reset checkIn/checkOut jika mereka sekarang berada di tanggal yang penuh
+}, { immediate: true })
 
 const steps = [
   { title: 'Kamar & Tanggal' },
@@ -239,7 +270,31 @@ const nights = computed(() => {
   return d > 0 ? d : 0
 })
 
-const totalPrice = computed(() => Math.round(form.value.room.price * nights.value * 1.16))
+const currentPrice = computed(() => {
+  return form.value.room.isPromoActive && form.value.room.discountPercentage > 0 
+    ? form.value.room.price * (1 - form.value.room.discountPercentage / 100) 
+    : form.value.room.price
+})
+
+const totalPrice = computed(() => Math.round(currentPrice.value * nights.value * 1.16))
+
+const submitBooking = () => {
+  if (!form.value.agreeTerms) return
+  submitting.value = true
+  router.post('/booking/simpan', {
+    room_id: form.value.room.id,
+    check_in: form.value.checkIn,
+    check_out: form.value.checkOut,
+    nights: nights.value,
+    guests: form.value.adults + form.value.children,
+    total_price: Math.round(currentPrice.value * nights.value),
+    email: form.value.email,
+    guest_name: form.value.guestName
+  }, {
+    onFinish: () => submitting.value = false,
+    onError: () => { submitting.value = false; }
+  })
+}
 
 const canNext = computed(() => {
   if (currentStep.value === 1) return form.value.checkIn && form.value.checkOut && nights.value > 0

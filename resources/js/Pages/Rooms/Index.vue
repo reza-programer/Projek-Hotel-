@@ -40,13 +40,19 @@
           <div v-for="room in filteredRooms" :key="room.id" class="room-card card-shoji">
             <!-- Image -->
             <div class="room-img" :style="room.images && room.images.length > 0 ? { backgroundImage: `url(${room.images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { background: gradient(room.colorTheme) }">
-              <span class="room-type-tag">{{ room.type }}</span>
+              <div style="position: absolute; top: 0.8rem; left: 0.8rem; display: flex; gap: 0.5rem; z-index: 2;">
+                <span class="room-type-tag" style="position: relative; top: 0; left: 0;">{{ room.type }}</span>
+                <span v-if="room.isPromoActive && room.discountPercentage > 0" class="room-promo-tag" style="position: relative; top: 0; left: 0; background: var(--color-beni-600); color: #fff; font-size: 0.68rem; padding: 0.2rem 0.55rem; border-radius: 2px; font-family: 'Inter', sans-serif;">PROMO {{ room.discountPercentage }}%</span>
+              </div>
               <div class="room-availability" :class="{ unavailable: !room.isAvailable }">
                 {{ room.isAvailable ? '✓ Tersedia' : '✗ Penuh' }}
               </div>
               <div v-if="!room.images || room.images.length === 0" class="room-big-kanji">{{ kanji(room.colorTheme) }}</div>
               <div class="room-price-tag">
-                <span class="price-num">{{ formatCurrency(room.price) }}</span>
+                <div v-if="room.isPromoActive && room.discountPercentage > 0" style="font-size: 0.7rem; text-decoration: line-through; opacity: 0.8; line-height: 1; margin-bottom: 0.1rem;">
+                  {{ formatCurrency(room.price) }}
+                </div>
+                <span class="price-num">{{ formatCurrency(room.isPromoActive ? room.price * (1 - room.discountPercentage/100) : room.price) }}</span>
                 <span class="price-unit">/malam</span>
               </div>
             </div>

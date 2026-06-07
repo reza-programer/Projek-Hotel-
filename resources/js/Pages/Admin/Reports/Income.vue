@@ -197,7 +197,7 @@ const exportCSV = () => {
   const encodedUri = encodeURI(csvContent)
   const link = document.createElement('a')
   link.setAttribute('href', encodedUri)
-  link.setAttribute('download', 'Miyabi_Hotel_Revenue_Report_2025.csv')
+  link.setAttribute('download', 'Darma Mizuki_Hotel_Revenue_Report_2025.csv')
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

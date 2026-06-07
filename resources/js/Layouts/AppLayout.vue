@@ -35,7 +35,7 @@ const navLinks = [
           <div>
             <div class="font-display text-xl font-semibold leading-none"
                  :style="scrolled ? 'color: var(--color-sumi-800)' : 'color: white'">
-              Miyabi Hotel
+              Darma Mizuki
             </div>
             <div class="text-kanji text-xs leading-none mt-0.5"
                  :style="scrolled ? '' : 'color: rgba(255,255,255,0.6); opacity:1'">
@@ -120,7 +120,7 @@ const navLinks = [
                 <span class="font-jp text-sm font-bold">雅</span>
               </div>
               <div>
-                <div class="font-display text-lg font-semibold">Miyabi Hotel</div>
+                <div class="font-display text-lg font-semibold">Darma Mizuki</div>
                 <div class="text-xs" style="color: rgba(255,255,255,0.4); font-family: var(--font-serif-jp)">雅ホテル</div>
               </div>
             </div>
@@ -167,7 +167,7 @@ const navLinks = [
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
-                <span>hello@miyabihotel.com</span>
+                <span>hello@darmamizuki.com</span>
               </li>
             </ul>
           </div>
@@ -193,7 +193,7 @@ const navLinks = [
 
         <div class="flex flex-col md:flex-row justify-between items-center gap-3 pt-4 text-xs"
              style="color: rgba(255,255,255,0.35)">
-          <span>© {{ new Date().getFullYear() }} Miyabi Hotel. Hak Cipta Dilindungi.</span>
+          <span>© {{ new Date().getFullYear() }} Darma Mizuki. Hak Cipta Dilindungi.</span>
           <span class="font-jp" style="color: var(--color-kin-500); letter-spacing:0.15em">雅ホテル ‒ おもてなし</span>
         </div>
       </div>

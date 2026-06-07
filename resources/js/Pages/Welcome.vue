@@ -119,7 +119,7 @@
         <div class="philosophy-left">
           <p class="section-kicker" style="color:var(--color-sakura-200)">おもてなし</p>
           <h2 class="philosophy-heading">Filosofi Omotenashi</h2>
-          <p class="philosophy-text">Omotenashi bukan sekadar pelayanan — ini adalah seni memberikan yang terbaik tanpa mengharapkan imbalan. Di Miyabi Hotel, setiap anggota tim kami dididik untuk memahami kebutuhan tamu bahkan sebelum diucapkan.</p>
+          <p class="philosophy-text">Omotenashi bukan sekadar pelayanan — ini adalah seni memberikan yang terbaik tanpa mengharapkan imbalan. Di Darma Mizuki, setiap anggota tim kami dididik untuk memahami kebutuhan tamu bahkan sebelum diucapkan.</p>
           <p class="philosophy-text">Dari lipatan handuk berbentuk origami, aroma sakura di koridor, hingga secangkir teh matcha hangat yang selalu siap — semuanya adalah bentuk cinta kami kepada setiap tamu.</p>
           <Link href="/tentang-kami" class="btn-outline-gold" style="margin-top:1.5rem; border-color:rgba(201,168,76,0.5); color:var(--color-kin-300);">
             Pelajari Lebih Lanjut

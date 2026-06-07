@@ -12,7 +12,7 @@
         <div class="auth-header">
           <span class="auth-kanji">阿</span>
           <h1 class="auth-title">Daftar Baru</h1>
-          <p class="auth-subtitle">Bergabunglah dengan Arunika Club untuk mendapatkan penawaran eksklusif.</p>
+          <p class="auth-subtitle">Bergabunglah dengan Darma Mizuki Club untuk mendapatkan penawaran eksklusif.</p>
         </div>
 
         <div class="divider-ink" style="margin: 1.25rem 0;"></div>
@@ -72,7 +72,7 @@
           <div class="form-actions-row">
             <label class="agreement">
               <input v-model="form.agree" type="checkbox" required />
-              <span>Saya menyetujui Syarat Keanggotaan Arunika Club.</span>
+              <span>Saya menyetujui Syarat Keanggotaan Darma Mizuki Club.</span>
             </label>
           </div>
 
@@ -154,7 +154,7 @@ const handleRegister = () => {
 
     // Save toast message in session storage
     sessionStorage.setItem('miyabi_flash', JSON.stringify({
-      message: `Registrasi Arunika Club berhasil! Selamat bergabung, ${form.value.name}.`,
+      message: `Registrasi Darma Mizuki Club berhasil! Selamat bergabung, ${form.value.name}.`,
       type: 'success'
     }))
     window.location.href = '/'

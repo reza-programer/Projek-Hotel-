@@ -146,7 +146,7 @@
           <div class="modal-header no-print">
             <div>
               <div class="modal-title">Nota Bukti Reservasi</div>
-              <div class="modal-subtitle">ARUNIKA OMOTENASHI INVOICE</div>
+              <div class="modal-subtitle">DARMA MIZUKI OMOTENASHI INVOICE</div>
             </div>
             <button @click="closeInvoice" class="modal-close">✕</button>
           </div>
@@ -207,10 +207,10 @@
               <!-- Stamp & Signature Block -->
               <div class="inv-bottom-row">
                 <div class="inv-hotel-details">
-                  <strong>ARUNIKA RYOKA</strong><br/>
+                  <strong>DARMA MIZUKI</strong><br/>
                   アルニカ 旅館 • Omotenashi Luxury<br/>
                   Jl. Sakura Indah No. 88, Jakarta Selatan<br/>
-                  hello@arunikaryoka.com
+                  hello@darmamizuki.com
                 </div>
                 <div class="inv-stamp-area">
                   <!-- Red Japanese Stamp -->
@@ -238,7 +238,14 @@ import { ref, computed, onMounted } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import AppLayout from '@/Components/Layout/AppLayout.vue'
 import SvgIcon from '@/Components/UI/SvgIcon.vue'
-import { reservations, formatCurrency, formatDate, statusConfig } from '@/data/mockData'
+import { formatCurrency, formatDate, statusConfig } from '@/data/mockData'
+
+const props = defineProps({
+  reservations: {
+    type: Array,
+    default: () => []
+  }
+})
 
 defineOptions({ layout: AppLayout })
 
@@ -248,14 +255,14 @@ const showCancel = ref(false)
 const showInvoiceModal = ref(false)
 const selectedRes = ref(null)
 const guestName = ref('Tamu Premium')
-const guestEmail = ref('tamu@arunikaryoka.com')
+const guestEmail = ref('tamu@darmamizuki.com')
 
 onMounted(() => {
   const storedUser = localStorage.getItem('miyabi_user')
   if (storedUser) {
     const user = JSON.parse(storedUser)
     guestName.value = user.name
-    guestEmail.value = user.email || 'tamu@arunikaryoka.com'
+    guestEmail.value = user.email || 'tamu@darmamizuki.com'
   }
 })
 
@@ -268,10 +275,10 @@ const tabs = [
 ]
 
 const filteredReservations = computed(() =>
-  activeTab.value === 'semua' ? reservations : reservations.filter(r => r.status === activeTab.value)
+  activeTab.value === 'semua' ? props.reservations : props.reservations.filter(r => r.status === activeTab.value)
 )
 
-const countByStatus = (key) => key === 'semua' ? reservations.length : reservations.filter(r => r.status === key).length
+const countByStatus = (key) => key === 'semua' ? props.reservations.length : props.reservations.filter(r => r.status === key).length
 
 const formatMonth = (d) => new Date(d).toLocaleDateString('id-ID', { month:'short' }).toUpperCase()
 const formatDay = (d) => new Date(d).getDate()

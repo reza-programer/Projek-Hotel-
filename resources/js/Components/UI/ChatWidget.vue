@@ -19,7 +19,7 @@
           <div class="header-profile">
             <span class="header-kanji">雅</span>
             <div>
-              <div class="header-title">Miyabi Concierge</div>
+              <div class="header-title">Darma Mizuki Concierge</div>
               <div class="header-status">
                 <span class="status-dot"></span>
                 <span>Online (Omotenashi)</span>
@@ -36,7 +36,7 @@
             <div class="auth-box">
               <span class="auth-icon">🔒</span>
               <h3>Layanan Khusus Anggota</h3>
-              <p>Silakan masuk ke akun Miyabi Club Anda untuk dapat mengobrol dengan Concierge kami yang ramah.</p>
+              <p>Silakan masuk ke akun Darma Mizuki Club Anda untuk dapat mengobrol dengan Concierge kami yang ramah.</p>
               <a href="/login" class="btn-vermillion btn-auth-action">Masuk Ke Akun</a>
               <a href="/register" class="auth-register-link">Belum punya akun? Daftar gratis</a>
             </div>
@@ -130,8 +130,8 @@ const loadMessages = () => {
         userId: currentUser.value.id,
         userName: currentUser.value.name,
         senderRole: 'admin',
-        senderName: 'Miyabi Concierge',
-        text: `Selamat datang di Miyabi Hotel Concierge, Bapak/Ibu ${currentUser.value.name}. Ada yang bisa kami bantu untuk kunjungan Anda hari ini?`,
+        senderName: 'Darma Mizuki Concierge',
+        text: `Selamat datang di Darma Mizuki Concierge, Bapak/Ibu ${currentUser.value.name}. Ada yang bisa kami bantu untuk kunjungan Anda hari ini?`,
         timestamp: new Date().toISOString(),
         readByUser: false,
         readByAdmin: true
@@ -206,7 +206,7 @@ const sendMessage = () => {
         userId: currentUser.value.id,
         userName: currentUser.value.name,
         senderRole: 'admin',
-        senderName: 'Miyabi Concierge (Auto)',
+        senderName: 'Darma Mizuki Concierge (Auto)',
         text: 'Pesan Anda telah diterima oleh Concierge. Staf kami akan segera menanggapi permintaan Anda di portal admin dalam beberapa saat. Terima kasih atas kesabaran Anda.',
         timestamp: new Date().toISOString(),
         readByUser: false,

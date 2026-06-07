@@ -60,6 +60,10 @@ const props = defineProps({
   direction: {
     type: String,
     default: 'down'
+  },
+  disabledDates: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -186,12 +190,24 @@ const isToday = (date) => {
 }
 
 const isDateDisabled = (date) => {
-  if (!props.min) return false
-  const minDate = new Date(props.min)
-  minDate.setHours(0, 0, 0, 0)
   const compareDate = new Date(date)
   compareDate.setHours(0, 0, 0, 0)
-  return compareDate < minDate
+  
+  if (props.min) {
+    const minDate = new Date(props.min)
+    minDate.setHours(0, 0, 0, 0)
+    if (compareDate < minDate) return true
+  }
+
+  if (props.disabledDates && props.disabledDates.length > 0) {
+    const y = compareDate.getFullYear()
+    const m = String(compareDate.getMonth() + 1).padStart(2, '0')
+    const d = String(compareDate.getDate()).padStart(2, '0')
+    const formatted = `${y}-${m}-${d}`
+    if (props.disabledDates.includes(formatted)) return true
+  }
+
+  return false
 }
 
 const handleClickOutside = (event) => {

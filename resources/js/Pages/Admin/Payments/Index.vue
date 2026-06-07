@@ -132,7 +132,7 @@
               </div>
               <div class="slip-row">
                 <span class="sr-label">KEPADA REKENING</span>
-                <span class="sr-val">123-4567-890 (ARUNIKA RYOKA PT)</span>
+                <span class="sr-val">123-4567-890 (DARMA MIZUKI PT)</span>
               </div>
               <div class="slip-row">
                 <span class="sr-label">NAMA PENGIRIM</span>

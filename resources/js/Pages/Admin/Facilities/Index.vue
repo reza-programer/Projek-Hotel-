@@ -80,7 +80,7 @@
           <div class="modal-header">
             <div>
               <div class="modal-title">{{ isEditMode ? 'Edit Fasilitas' : 'Tambah Fasilitas Baru' }}</div>
-              <div class="modal-subtitle">MIYABI OMOTENASHI FACILITIES</div>
+              <div class="modal-subtitle">DARMA MIZUKI OMOTENASHI FACILITIES</div>
             </div>
             <button @click="showModal=false" class="modal-close">✕</button>
           </div>

@@ -1,15 +1,15 @@
 // resources/js/data/mockData.js
-// Data dummy untuk development frontend Miyabi Hotel
+// Data dummy untuk development frontend Darma Mizuki
 
 export const hotelInfo = {
-  name: 'Arunika Ryoka',
+  name: 'Darma Mizuki',
   nameJP: 'アルニカ 旅館',
   tagline: 'Where Omotenashi Meets Elegance',
   taglineJP: 'おもてなしが優雅さに出会う場所',
-  description: 'Arunika Ryoka menawarkan pengalaman menginap kelas dunia yang terinspirasi dari filosofi keramahan Jepang — Omotenashi. Setiap sudut hotel dirancang untuk memberikan ketenangan, keindahan, dan pelayanan yang tulus dari hati.',
+  description: 'Darma Mizuki menawarkan pengalaman menginap kelas dunia yang terinspirasi dari filosofi keramahan Jepang — Omotenashi. Setiap sudut hotel dirancang untuk memberikan ketenangan, keindahan, dan pelayanan yang tulus dari hati.',
   address: 'Jl. Sakura Indah No. 88, Jakarta Selatan, Indonesia 12140',
   phone: '+62 21 8888-7777',
-  email: 'hello@arunikaryoka.com',
+  email: 'hello@darmamizuki.com',
   established: 2018,
   totalRooms: 84,
   stars: 5,
@@ -45,6 +45,8 @@ export const rooms = [
     ],
     thumbnail: '/images/rooms/sakura-1.png',
     isAvailable: true,
+    isPromoActive: true,
+    discountPercentage: 20,
     rating: 4.8,
     reviewCount: 124,
     features: ['Garden View', 'Futon Option'],
@@ -132,7 +134,7 @@ export const rooms = [
     size: 120,
     floor: '15 (Top Floor)',
     description: 'Presidential suite eksklusif di lantai tertinggi. Panorama 360° dan layanan tertinggi ala istana Jepang.',
-    longDescription: 'Persembahan tertinggi Arunika Ryoka. Presidential Suite hadir di lantai paling atas dengan panorama 360 derajat yang memukau. Tiga kamar tidur, ruang resepsi privat, dapur lengkap, dan jakuzi rooftop menghadap langit malam. Tim butler pribadi siap 24 jam memenuhi setiap kebutuhan Anda.',
+    longDescription: 'Persembahan tertinggi Darma Mizuki. Presidential Suite hadir di lantai paling atas dengan panorama 360 derajat yang memukau. Tiga kamar tidur, ruang resepsi privat, dapur lengkap, dan jakuzi rooftop menghadap langit malam. Tim butler pribadi siap 24 jam memenuhi setiap kebutuhan Anda.',
     amenities: ['Wi-Fi Ultra-Speed', 'AC Cerdas', 'Home Theater 8K', 'Wine Cellar', 'Butler Tim Pribadi', 'Jakuzi Rooftop', 'Yukata Sutra Premium', 'Chef Privat On-Request', 'Helipad Access', 'Limousine Fleet', 'Spa Suite Privat', 'Airport Transfer Premium'],
     images: [
       '/images/rooms/fuji-1.png',
@@ -214,7 +216,7 @@ export const testimonials = [
     origin: 'Jakarta, Indonesia',
     avatar: null,
     rating: 5,
-    comment: 'Pertama kalinya saya merasakan penginapan yang benar-benar memperhatikan tamu sampai detail sekecil lipatan handuk berbentuk burung origami. Arunika Ryoka adalah definisi kemewahan yang sesungguhnya.',
+    comment: 'Pertama kalinya saya merasakan penginapan yang benar-benar memperhatikan tamu sampai detail sekecil lipatan handuk berbentuk burung origami. Darma Mizuki adalah definisi kemewahan yang sesungguhnya.',
     date: '2025-04-18',
     stayType: 'Sakura Standard',
   },
@@ -280,7 +282,7 @@ export const revenueData = {
 export const users = [
   { id: 1, name: 'Budi Santoso', email: 'budi@email.com', role: 'user', status: 'active', joined: '2024-01-15', reservations: 7 },
   { id: 2, name: 'Siti Rahayu', email: 'siti@email.com', role: 'user', status: 'active', joined: '2024-02-20', reservations: 3 },
-  { id: 3, name: 'Ahmad Admin', email: 'admin@arunikaryoka.com', role: 'admin', status: 'active', joined: '2023-12-01', reservations: 0 },
+  { id: 3, name: 'Ahmad Admin', email: 'admin@darmamizuki.com', role: 'admin', status: 'active', joined: '2023-12-01', reservations: 0 },
   { id: 4, name: 'Dewi Lestari', email: 'dewi@email.com', role: 'user', status: 'inactive', joined: '2024-03-08', reservations: 1 },
   { id: 5, name: 'Michael Chen', email: 'michael@email.com', role: 'user', status: 'active', joined: '2024-04-12', reservations: 12 },
   { id: 6, name: 'Yuki Tanaka', email: 'yuki@email.com', role: 'user', status: 'active', joined: '2024-05-01', reservations: 5 },

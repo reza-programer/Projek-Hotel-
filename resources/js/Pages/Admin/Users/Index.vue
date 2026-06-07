@@ -112,7 +112,7 @@
           <div class="modal-header">
             <div>
               <div class="modal-title">{{ isEditMode ? 'Edit Pengguna' : 'Tambah Pengguna Baru' }}</div>
-              <div class="modal-subtitle">MIYABI MEMBER & STAFF MANAGEMENT</div>
+              <div class="modal-subtitle">DARMA MIZUKI MEMBER & STAFF MANAGEMENT</div>
             </div>
             <button @click="showModal=false" class="modal-close">✕</button>
           </div>

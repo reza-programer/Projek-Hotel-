@@ -12,7 +12,7 @@
         <div class="auth-header">
           <span class="auth-kanji">阿</span>
           <h1 class="auth-title">Selamat Datang</h1>
-          <p class="auth-subtitle">Masuk ke akun Arunika Anda untuk menikmati pelayanan Omotenashi.</p>
+          <p class="auth-subtitle">Masuk ke akun Darma Mizuki Anda untuk menikmati pelayanan Omotenashi.</p>
         </div>
 
         <div class="divider-ink" style="margin: 1.25rem 0;"></div>
@@ -30,7 +30,7 @@
               v-model="form.email" 
               type="email" 
               class="input-zen" 
-              placeholder="budi@email.com atau admin@arunikaryoka.com" 
+              placeholder="budi@email.com atau admin@darmamizuki.com" 
               required 
             />
           </div>
@@ -81,8 +81,8 @@
       <div v-if="loginSuccess" class="fullscreen-loading">
         <div class="loading-content">
           <div class="loading-logo-kanji">阿</div>
-          <div class="loading-logo-text">ARUNIKA RYOKA</div>
-          <div class="spinner"></div>
+          <div class="loading-logo-text">DARMA MIZUKI</div>
+          <div class="loading-line"></div>
         </div>
       </div>
     </Transition>
@@ -441,16 +441,29 @@ const forgotPassword = () => {
   letter-spacing: 0.2em;
   color: var(--color-sumi-800);
 }
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(201, 168, 76, 0.3);
-  border-top-color: var(--color-kin-500);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-top: 1rem;
+.loading-line {
+  width: 140px;
+  height: 2px;
+  background: rgba(201, 168, 76, 0.2);
+  position: relative;
+  overflow: hidden;
+  margin-top: 1.5rem;
+  border-radius: 2px;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+.loading-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 40%;
+  background: var(--color-kin-500);
+  animation: sweep 1.5s ease-in-out infinite;
+  border-radius: 2px;
+}
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(150%); }
+  100% { transform: translateX(-100%); }
+}
 .fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

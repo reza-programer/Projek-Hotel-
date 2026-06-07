@@ -99,7 +99,7 @@
               <div v-if="rev.reply" class="admin-reply">
                 <div class="reply-header">
                   <span class="reply-avatar" style="display:inline-flex;"><SvgIcon name="ikebana" width="14" height="14" class="text-beni" /></span>
-                  <span class="reply-author">Tanggapan dari Miyabi Host (Omotenashi Team)</span>
+                  <span class="reply-author">Tanggapan dari Darma Mizuki Host (Omotenashi Team)</span>
                 </div>
                 <p class="reply-content">{{ rev.reply }}</p>
               </div>
@@ -152,7 +152,7 @@ const myReviews = ref([
     date: '2024-12-28',
     rating: 5,
     comment: 'Puncak kemewahan tradisi Jepang yang sesungguhnya. Zen garden pribadinya sungguh menenangkan, dan ofuro bathtub-nya sangat membantu melepas lelah. Makanan Kaiseki lezat tiada tanding. Kami dilayani bagai kaisar.',
-    reply: 'Terima kasih banyak atas ulasan indah Anda. Kami sangat senang taman zen dan pelayanan kami mendatangkan ketenangan bagi Anda. Kami menantikan kehadiran Anda kembali di kediaman Miyabi.',
+    reply: 'Terima kasih banyak atas ulasan indah Anda. Kami sangat senang taman zen dan pelayanan kami mendatangkan ketenangan bagi Anda. Kami menantikan kehadiran Anda kembali di kediaman Darma Mizuki.',
     suggestion: ''
   }
 ])

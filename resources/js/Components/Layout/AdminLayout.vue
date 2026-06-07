@@ -7,7 +7,7 @@
         <div class="sidebar-logo">
           <span class="s-kanji">阿</span>
           <div v-if="!sidebarCollapsed">
-            <div class="s-name">ARUNIKA</div>
+            <div class="s-name">DARMA MIZUKI</div>
             <div class="s-sub">ADMIN PANEL</div>
           </div>
         </div>
@@ -96,7 +96,7 @@
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
           <div class="header-breadcrumb">
-            <span class="breadcrumb-hotel">阿 Arunika</span>
+            <span class="breadcrumb-hotel">阿 Darma Mizuki</span>
             <span class="breadcrumb-sep">›</span>
             <span class="breadcrumb-page">{{ title }}</span>
           </div>
@@ -149,9 +149,9 @@
       <div v-if="logoutSuccess" class="fullscreen-loading">
         <div class="loading-content">
           <div class="loading-logo-kanji">阿</div>
-          <div class="loading-logo-text">ARUNIKA RYOKA</div>
-          <div class="spinner"></div>
-          <p style="margin-top: 1rem; color: var(--color-sumi-600); font-family: 'Inter', sans-serif; font-size: 0.9rem;">Keluar dari sistem...</p>
+          <div class="loading-logo-text">DARMA MIZUKI</div>
+          <div class="loading-line"></div>
+          <p style="margin-top: 1rem; color: var(--color-sumi-600); font-family: 'Inter', sans-serif; font-size: 0.9rem;">Keluar dari sistem admin...</p>
         </div>
       </div>
     </Transition>
@@ -394,16 +394,29 @@ onUnmounted(() => {
   letter-spacing: 0.2em;
   color: var(--color-sumi-800);
 }
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 3px solid rgba(201, 168, 76, 0.3);
-  border-top-color: var(--color-kin-500);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+.loading-line {
+  width: 140px;
+  height: 2px;
+  background: rgba(201, 168, 76, 0.2);
+  position: relative;
+  overflow: hidden;
   margin-top: 1rem;
+  border-radius: 2px;
 }
-@keyframes spin { 100% { transform: rotate(360deg); } }
+.loading-line::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 40%;
+  background: var(--color-kin-500);
+  animation: sweep 1.5s ease-in-out infinite;
+  border-radius: 2px;
+}
+@keyframes sweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(150%); }
+  100% { transform: translateX(-100%); }
+}
 .fade-enter-active, .fade-leave-active { transition: opacity 0.5s ease; }
 .fade-enter-from, .fade-leave-to { opacity: 0; }
 </style>

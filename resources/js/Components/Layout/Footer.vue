@@ -15,7 +15,7 @@
           <div class="footer-logo">
             <span class="logo-kanji">阿</span>
             <div>
-              <div class="logo-name">ARUNIKA RYOKA</div>
+              <div class="logo-name">DARMA MIZUKI</div>
               <div class="logo-jp">アルニカ 旅館</div>
             </div>
           </div>
@@ -121,7 +121,7 @@
                   <polyline points="22,6 12,13 2,6" />
                 </svg>
               </span>
-              <span>hello@arunikaryoka.com</span>
+              <span>hello@darmamizuki.com</span>
             </li>
             <li>
               <span class="contact-icon">
@@ -147,7 +147,7 @@
 
       <!-- Bottom -->
       <div class="container-zen footer-bottom">
-        <p>© {{ new Date().getFullYear() }} Arunika Ryoka · アルニカ 旅館 · All Rights Reserved</p>
+        <p>© {{ new Date().getFullYear() }} Darma Mizuki · アルニカ 旅館 · All Rights Reserved</p>
         <div class="footer-bottom-links">
           <a href="#">Kebijakan Privasi</a>
           <span>·</span>

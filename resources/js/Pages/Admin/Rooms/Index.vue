@@ -105,7 +105,7 @@
           <div class="modal-header">
             <div>
               <div class="modal-title">{{ isEditMode ? 'Edit Kamar' : 'Tambah Kamar Baru' }}</div>
-              <div class="modal-subtitle">MIYABI LUXURY ROOMS</div>
+              <div class="modal-subtitle">DARMA MIZUKI LUXURY ROOMS</div>
             </div>
             <button @click="showModal=false" class="modal-close">✕</button>
           </div>
@@ -145,6 +145,20 @@
                     <option :value="true">Tersedia</option>
                     <option :value="false">Penuh / Dipesan</option>
                   </select>
+                </div>
+              </div>
+
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label class="label-zen">STATUS PROMO</label>
+                  <select v-model="form.isPromoActive" class="input-zen">
+                    <option :value="true">Promo Aktif</option>
+                    <option :value="false">Tidak Ada Promo</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="label-zen">DISKON (%)</label>
+                  <input v-model.number="form.discountPercentage" type="number" class="input-zen" min="0" max="100" :disabled="!form.isPromoActive" />
                 </div>
               </div>
 
@@ -208,6 +222,29 @@
           </form>
         </div>
       </div>
+    <!-- Delete Confirmation Modal -->
+    <Transition name="modal">
+      <div v-if="showDeleteModal" class="modal-overlay" @click.self="showDeleteModal=false">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+          <div class="modal-body" style="padding: 2rem;">
+            <div style="font-size: 3rem; color: var(--color-beni-600); margin-bottom: 1rem; display: flex; justify-content: center;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 600; color: var(--color-sumi-800); margin-bottom: 0.5rem;">Konfirmasi Hapus</h3>
+            <p style="color: var(--color-sumi-600); font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem;">
+              Apakah Anda yakin ingin menghapus kamar <strong>#{{ roomToDelete?.id }} - {{ roomToDelete?.name }}</strong>?<br>Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div style="display: flex; gap: 0.75rem; justify-content: center;">
+              <button class="btn-outline-gold" @click="showDeleteModal=false">Batal</button>
+              <button class="btn-vermillion" @click="confirmDelete" style="background: var(--color-beni-600); border-color: var(--color-beni-600);">Ya, Hapus</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </Transition>
   </div>
 </template>
@@ -226,8 +263,10 @@ const filterType = ref('All')
 const filterStatus = ref('All')
 
 const showModal = ref(false)
+const showDeleteModal = ref(false)
 const isEditMode = ref(false)
 const currentRoomId = ref(null)
+const roomToDelete = ref(null)
 
 const form = ref({
   name: '',
@@ -240,6 +279,8 @@ const form = ref({
   description: '',
   longDescription: '',
   isAvailable: true,
+  isPromoActive: false,
+  discountPercentage: 0,
   amenitiesString: '',
   images: []
 })
@@ -307,6 +348,8 @@ const openCreateModal = () => {
     description: '',
     longDescription: '',
     isAvailable: true,
+    isPromoActive: false,
+    discountPercentage: 0,
     amenitiesString: 'Wi-Fi Gratis, AC, TV, Minibar, Yukata, Shower & Bathtub',
     images: []
   }
@@ -327,6 +370,8 @@ const openEditModal = (room) => {
     description: room.description,
     longDescription: room.longDescription,
     isAvailable: room.isAvailable,
+    isPromoActive: room.isPromoActive || false,
+    discountPercentage: room.discountPercentage || 0,
     amenitiesString: room.amenities ? room.amenities.join(', ') : '',
     images: room.images ? [...room.images] : []
   }
@@ -354,12 +399,16 @@ const saveRoom = () => {
         description: form.value.description,
         longDescription: form.value.longDescription,
         isAvailable: form.value.isAvailable,
+        isPromoActive: form.value.isPromoActive,
+        discountPercentage: form.value.discountPercentage,
         amenities: amenitiesList,
         images: form.value.images || []
       }
     }
     saveRooms()
-    alert('Kamar berhasil diperbarui!')
+    window.dispatchEvent(new CustomEvent('miyabi-show-toast', {
+      detail: { message: 'Kamar berhasil diperbarui!', type: 'success' }
+    }))
   } else {
     // Create
     const newRoom = {
@@ -374,6 +423,8 @@ const saveRoom = () => {
       description: form.value.description,
       longDescription: form.value.longDescription,
       isAvailable: form.value.isAvailable,
+      isPromoActive: form.value.isPromoActive,
+      discountPercentage: form.value.discountPercentage,
       amenities: amenitiesList,
       rating: 5.0,
       reviewCount: 0,
@@ -384,16 +435,30 @@ const saveRoom = () => {
     }
     rooms.value.push(newRoom)
     saveRooms()
-    alert('Kamar baru berhasil ditambahkan!')
+    window.dispatchEvent(new CustomEvent('miyabi-show-toast', {
+      detail: { message: 'Kamar baru berhasil ditambahkan!', type: 'success' }
+    }))
   }
   showModal.value = false
 }
 
 const deleteRoom = (id) => {
-  if (confirm('Apakah Anda yakin ingin menghapus kamar #' + id + '?')) {
-    rooms.value = rooms.value.filter(r => r.id !== id)
+  const room = rooms.value.find(r => r.id === id)
+  if (room) {
+    roomToDelete.value = room
+    showDeleteModal.value = true
+  }
+}
+
+const confirmDelete = () => {
+  if (roomToDelete.value) {
+    rooms.value = rooms.value.filter(r => r.id !== roomToDelete.value.id)
     saveRooms()
-    alert('Kamar berhasil dihapus.')
+    showDeleteModal.value = false
+    window.dispatchEvent(new CustomEvent('miyabi-show-toast', {
+      detail: { message: 'Kamar berhasil dihapus.', type: 'success' }
+    }))
+    roomToDelete.value = null
   }
 }
 </script>

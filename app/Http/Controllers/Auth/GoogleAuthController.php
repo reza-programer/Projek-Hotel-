@@ -49,9 +49,6 @@ class GoogleAuthController extends Controller
 
             Auth::login($user);
 
-            // Set simulated session key for Navbar.vue so front-end detects it
-            // We store the session in localstorage on page mount if user is logged in
-            // But since this is a traditional redirect, let's redirect home
             return redirect()->intended('/');
             
         } catch (Exception $e) {

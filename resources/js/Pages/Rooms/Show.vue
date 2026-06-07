@@ -126,9 +126,12 @@
           </div>
 
           <div class="sidebar-price">
-            <span class="price-from">Mulai dari</span>
-            <div class="price-big">{{ formatCurrency(room.price) }}</div>
-            <div class="price-per">per malam</div>
+            <div class="price-from">Mulai dari</div>
+            <div v-if="room.isPromoActive && room.discountPercentage > 0" class="price-slashed-wrapper">
+              <span class="price-slashed">{{ formatCurrency(room.price) }}</span>
+            </div>
+            <div class="price-big" :class="{ 'promo-active': room.isPromoActive && room.discountPercentage > 0 }">{{ formatCurrency(currentPrice) }}</div>
+            <div class="price-per">per malam <span v-if="room.isPromoActive && room.discountPercentage > 0" class="promo-badge-anim">PROMO {{ room.discountPercentage }}%</span></div>
           </div>
 
           <div class="sidebar-form">
@@ -136,10 +139,12 @@
               <div class="form-col">
                 <label class="label-zen">Check-In</label>
                 <DatePicker v-model="bookForm.checkIn" :min="today" @change="calcPrice" />
+                <div style="font-size: 0.65rem; color: rgba(247,243,237,0.5); margin-top: 0.2rem;">Mulai 14:00</div>
               </div>
               <div class="form-col">
                 <label class="label-zen">Check-Out</label>
                 <DatePicker v-model="bookForm.checkOut" :min="bookForm.checkIn || today" @change="calcPrice" />
+                <div style="font-size: 0.65rem; color: rgba(247,243,237,0.5); margin-top: 0.2rem;">Maks 12:00</div>
               </div>
             </div>
             <div>
@@ -155,16 +160,16 @@
           <!-- Price Breakdown -->
           <div v-if="nights > 0" class="price-breakdown">
             <div class="breakdown-row">
-              <span>{{ formatCurrency(room.price) }} × {{ nights }} malam</span>
-              <span>{{ formatCurrency(room.price * nights) }}</span>
+              <span>{{ formatCurrency(currentPrice) }} × {{ nights }} malam</span>
+              <span>{{ formatCurrency(currentPrice * nights) }}</span>
             </div>
             <div class="breakdown-row">
               <span>Pajak (11%)</span>
-              <span>{{ formatCurrency(Math.round(room.price * nights * 0.11)) }}</span>
+              <span>{{ formatCurrency(Math.round(currentPrice * nights * 0.11)) }}</span>
             </div>
             <div class="breakdown-row">
               <span>Layanan (5%)</span>
-              <span>{{ formatCurrency(Math.round(room.price * nights * 0.05)) }}</span>
+              <span>{{ formatCurrency(Math.round(currentPrice * nights * 0.05)) }}</span>
             </div>
             <div class="breakdown-total">
               <span>Total</span>
@@ -195,7 +200,7 @@
         <div class="related-grid">
           <div v-for="r in relatedRooms" :key="r.id" class="related-card card-shoji">
             <div class="related-img" :style="r.images && r.images.length > 0 ? { backgroundImage: `url(${r.images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { background: gradient(r.colorTheme) }">
-              <span class="related-price">{{ formatCurrency(r.price) }}/mlm</span>
+              <span class="related-price">{{ formatCurrency(r.isPromoActive ? r.price * (1 - r.discountPercentage/100) : r.price) }}/mlm</span>
             </div>
             <div style="padding:1rem;">
               <div style="font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--color-sumi-800);">{{ r.name }}</div>
@@ -238,8 +243,13 @@ const nights = computed(() => {
   const d = (new Date(bookForm.value.checkOut) - new Date(bookForm.value.checkIn)) / 86400000
   return d > 0 ? d : 0
 })
+const currentPrice = computed(() => {
+  return room.value.isPromoActive && room.value.discountPercentage > 0 
+    ? room.value.price * (1 - room.value.discountPercentage / 100) 
+    : room.value.price
+})
 const totalPrice = computed(() => {
-  const base = room.value.price * nights.value
+  const base = currentPrice.value * nights.value
   return Math.round(base * 1.16)
 })
 const calcPrice = () => {}
@@ -310,10 +320,23 @@ const thumbColors = {
 .star { color:#ddd; font-size:0.85rem; }
 .star.filled { color:var(--color-kin-500); }
 .sidebar-reviews { font-size:0.72rem; color:var(--color-sumi-600); margin-left:0.25rem; font-family:'Inter',sans-serif; }
-.sidebar-price { background:var(--color-sumi-800); color:#fff; padding:1.25rem; border-radius:4px; margin-bottom:1.25rem; text-align:center; }
-.price-from { font-size:0.7rem; color:rgba(247,243,237,0.6); font-family:'Inter',sans-serif; letter-spacing:0.1em; }
-.price-big { font-family:'Cormorant Garamond',serif; font-size:1.8rem; font-weight:600; color:var(--color-kin-300); line-height:1.2; }
-.price-per { font-size:0.72rem; color:rgba(247,243,237,0.5); font-family:'Inter',sans-serif; }
+.sidebar-price { background:var(--color-sumi-800); color:#fff; padding:1.5rem 1.25rem; border-radius:4px; margin-bottom:1.25rem; text-align:center; overflow:hidden; position:relative; }
+.price-from { display:block; font-size:0.75rem; color:rgba(247,243,237,0.7); font-family:'Inter',sans-serif; letter-spacing:0.1em; margin-bottom:0.3rem; }
+
+/* Jedar Promo Animations */
+.price-slashed-wrapper { margin-bottom:-0.2rem; }
+.price-slashed { position:relative; display:inline-block; font-size:1rem; color:rgba(247,243,237,0.9); animation:shot-impact 0.4s ease-out 0.4s forwards; font-family:'Inter',sans-serif; }
+.price-slashed::after { content:''; position:absolute; top:50%; left:-5%; width:110%; height:2px; background-color:var(--color-beni-500); transform:scaleX(0); transform-origin:center; animation:bullet-strike 0.15s ease-out 0.4s forwards; box-shadow:0 0 8px rgba(155,35,53,1); }
+.price-big { font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:600; color:var(--color-kin-300); line-height:1.2; margin-top:0.2rem; }
+.price-big.promo-active { display:inline-block; animation:explode-in 0.5s cubic-bezier(0.175,0.885,0.32,1.275) 0.5s backwards; }
+.promo-badge-anim { color:#fff; font-weight:600; font-size:0.65rem; margin-left:0.4rem; background:var(--color-beni-600); padding:0.15rem 0.4rem; border-radius:3px; display:inline-block; animation:fade-up 0.4s ease-out 0.9s backwards; letter-spacing:0.05em; }
+
+@keyframes bullet-strike { 0% { transform:scaleX(0); opacity:1; } 50% { transform:scaleX(1.1); height:4px; opacity:1; } 100% { transform:scaleX(1); height:2px; opacity:0.8; } }
+@keyframes explode-in { 0% { transform:scale(3); opacity:0; filter:blur(4px); } 40% { transform:scale(0.9); opacity:1; filter:blur(0); color:#fff; text-shadow:0 0 20px rgba(255,255,255,0.8), 0 0 40px rgba(201,168,76,1); } 60% { transform:scale(1.05); } 100% { transform:scale(1); opacity:1; } }
+@keyframes shot-impact { 0% { transform:translate(0,0) scale(1); filter:blur(0); opacity:1; } 10% { transform:translate(-4px, 2px) scale(0.95); filter:blur(1px); opacity:0.5; } 20% { transform:translate(4px, -2px) scale(0.95); opacity:0.5; } 30% { transform:translate(-2px, 1px) scale(0.95); opacity:0.5; } 100% { transform:translate(0,0) scale(0.95); filter:blur(0); opacity:0.5; } }
+@keyframes fade-up { 0% { opacity:0; transform:translateY(5px); } 100% { opacity:1; transform:translateY(0); } }
+
+.price-per { font-size:0.75rem; color:rgba(247,243,237,0.6); font-family:'Inter',sans-serif; margin-top:0.2rem; }
 .sidebar-form { display:flex; flex-direction:column; gap:0.75rem; margin-bottom:1rem; }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; }
 .form-col {}

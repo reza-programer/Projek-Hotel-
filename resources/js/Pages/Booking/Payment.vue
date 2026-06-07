@@ -22,104 +22,59 @@
               <div class="os-subtitle">予約サマリー</div>
             </div>
           </div>
-          <div class="os-booking-id">Kode: <strong>MYB-{{ bookingCode }}</strong></div>
+          <div class="os-booking-id">Kode: <strong>{{ reservation.booking_code }}</strong></div>
           <div class="os-divider"/>
           <div class="os-room">
             <div class="os-room-img" style="background:linear-gradient(135deg,#2E0E0E,#B83347)">
               <span style="font-family:'Noto Serif JP',serif; font-size:1.5rem; color:rgba(255,255,255,0.2);">紅</span>
             </div>
             <div>
-              <div class="os-room-name">Bamboo Deluxe</div>
-              <div class="os-room-jp">竹デラックス</div>
-              <div class="os-room-type">Deluxe · 38m² · Max 2 Tamu</div>
+              <div class="os-room-name">{{ reservation.room.name }}</div>
+              <div class="os-room-jp">{{ reservation.room.name_jp }}</div>
+              <div class="os-room-type">{{ reservation.room.type }} · Max {{ reservation.room.capacity }} Tamu</div>
             </div>
           </div>
           <div class="os-divider"/>
-          <div class="os-detail-row"><span>Check-In</span><span>10 Juni 2025</span></div>
-          <div class="os-detail-row"><span>Check-Out</span><span>13 Juni 2025</span></div>
-          <div class="os-detail-row"><span>Durasi</span><span>3 Malam</span></div>
-          <div class="os-detail-row"><span>Tamu</span><span>2 Dewasa</span></div>
+          <div class="os-detail-row"><span>Check-In</span><span>{{ formatDate(reservation.check_in) }}</span></div>
+          <div class="os-detail-row"><span>Check-Out</span><span>{{ formatDate(reservation.check_out) }}</span></div>
+          <div class="os-detail-row"><span>Durasi</span><span>{{ reservation.nights }} Malam</span></div>
+          <div class="os-detail-row"><span>Tamu</span><span>{{ reservation.guests }} Dewasa</span></div>
           <div class="os-divider"/>
-          <div class="os-detail-row"><span>Harga Kamar</span><span>Rp 1.350.000/mlm</span></div>
-          <div class="os-detail-row"><span>Subtotal (3 mlm)</span><span>Rp 4.050.000</span></div>
-          <div class="os-detail-row"><span>Pajak (11%)</span><span>Rp 445.500</span></div>
-          <div class="os-detail-row"><span>Layanan (5%)</span><span>Rp 202.500</span></div>
-          <div class="os-total-row"><span>Total</span><span>Rp 4.698.000</span></div>
+          <div class="os-detail-row"><span>Harga Kamar</span><span>Rp {{ formatPrice(reservation.room.price) }}/mlm</span></div>
+          <div class="os-detail-row"><span>Subtotal ({{ reservation.nights }} mlm)</span><span>Rp {{ formatPrice(reservation.total_price) }}</span></div>
+          <div class="os-detail-row"><span>Pajak (11%)</span><span>Rp {{ formatPrice(reservation.total_price * 0.11) }}</span></div>
+          <div class="os-detail-row"><span>Layanan (5%)</span><span>Rp {{ formatPrice(reservation.total_price * 0.05) }}</span></div>
+          <div class="os-total-row"><span>Total</span><span>Rp {{ formatPrice(totalGrossAmount) }}</span></div>
           <div class="os-note">✦ Harga sudah termasuk pajak dan biaya layanan</div>
         </div>
 
         <!-- Right: Payment Form -->
         <div class="payment-form-area">
-          <!-- Method Selection -->
-          <div class="payment-card card-shoji" style="padding:1.75rem; margin-bottom:1.25rem;">
-            <h3 class="payment-section-title">Metode Pembayaran <span class="pay-jp">支払い方法</span></h3>
-            <div class="payment-methods">
-              <label v-for="m in paymentMethods" :key="m.id" class="method-option" :class="{ selected: selectedMethod===m.id }">
-                <input type="radio" :value="m.id" v-model="selectedMethod" style="display:none;"/>
-                <div class="method-icon"><img :src="m.logoUrl" :alt="m.name" style="width: 48px; height: auto; max-height: 24px; object-fit: contain;" /></div>
-                <div class="method-info">
-                  <div class="method-name">{{ m.name }}</div>
-                  <div class="method-desc">{{ m.desc }}</div>
-                </div>
-                <div class="method-radio" :class="{ active: selectedMethod===m.id }"/>
-              </label>
+          <div class="payment-card card-shoji" style="padding:2.5rem 1.75rem; margin-bottom:1.25rem; text-align:center;">
+            <div style="margin-bottom:1.5rem;">
+              <SvgIcon name="completed" width="48" height="48" class="text-kin" style="margin: 0 auto; display:block;" />
             </div>
-          </div>
+            <h3 class="payment-section-title">Pembayaran Aman <span class="pay-jp">安全な支払い</span></h3>
+            <p style="font-size:0.85rem; color:var(--color-sumi-600); line-height:1.7; margin-bottom:1.5rem;">
+              Anda akan diarahkan ke sistem pembayaran aman Midtrans. Anda dapat memilih berbagai metode pembayaran seperti Virtual Account, Kartu Kredit, GoPay, ShopeePay, atau QRIS.
+            </p>
+            
+            <div style="background:rgba(201,168,76,0.05); border:1px dashed rgba(201,168,76,0.4); padding:1rem; border-radius:4px; margin-bottom:1.5rem;">
+               <div style="display:flex; justify-content:center; gap:0.5rem; align-items:center;">
+                 <span style="font-size:0.75rem; font-weight:600; color:var(--color-sumi-800); font-family:'Inter', sans-serif; opacity: 0.7;">Powered by</span>
+                 <strong style="font-family:'Inter', sans-serif; color:#0F4C81; font-size:1.1rem; font-weight:800; letter-spacing: -0.5px;">midtrans</strong>
+               </div>
+            </div>
 
-          <!-- Bank Details (if transfer) -->
-          <div v-if="currentMethod && currentMethod.accountNumber" class="payment-card card-shoji bank-detail-card">
-            <h4 class="bank-detail-title">{{ currentMethod.name }}</h4>
-            <div class="bank-info">
-              <div class="bank-logo"><img :src="currentMethod.logoUrl" :alt="currentMethod.name" style="width: 80px; height: auto; max-height: 40px; object-fit: contain;" /></div>
-              <div>
-                <div class="bank-label">Nomor Rekening</div>
-                <div class="bank-number">{{ currentMethod.accountNumber }}</div>
-                <div class="bank-name">{{ currentMethod.accountName }}</div>
-              </div>
-              <button class="copy-btn" @click="copyAccount" title="Salin nomor rekening">
-                <SvgIcon name="completed" width="14" height="14" />
-              </button>
-            </div>
-            <div class="bank-amount">
-              <div class="bank-label">Jumlah Transfer (Tepat)</div>
-              <div class="bank-amount-val">Rp 4.698.000</div>
-            </div>
-            <div class="bank-warning" style="display:flex; align-items:flex-start; gap:0.4rem;">
-              <SvgIcon name="warning" width="14" height="14" class="text-beni" style="margin-top:2px;" />
-              <span>Transfer harus sesuai nominal persis. Pembayaran diproses dalam 1×24 jam kerja.</span>
-            </div>
+            <!-- Submit -->
+            <button class="btn-vermillion confirm-pay-btn" @click="submitPayment" :disabled="submitting">
+              <span v-if="!submitting">Lanjutkan ke Pembayaran</span>
+              <span v-else>⏳ Membuka Sistem Pembayaran...</span>
+            </button>
+            <p style="text-align:center; font-size:0.75rem; color:var(--color-sumi-600); margin-top:0.75rem; font-family:'Noto Serif JP',serif; display:flex; align-items:center; justify-content:center; gap:0.25rem;">
+              <SvgIcon name="warning" width="11" height="11" /> Transaksi ini dilindungi enkripsi kelas bank
+            </p>
           </div>
-
-          <!-- Upload Bukti -->
-          <div class="payment-card card-shoji" style="padding:1.75rem; margin-bottom:1.25rem;">
-            <h3 class="payment-section-title">Upload Bukti Pembayaran <span class="pay-jp">支払い証明</span></h3>
-            <div class="upload-area" :class="{ 'has-file': uploadedFile }" @click="$refs.fileInput.click()" @dragover.prevent @drop.prevent="handleDrop">
-              <input ref="fileInput" type="file" accept="image/*,.pdf" style="display:none;" @change="handleFile"/>
-              <div v-if="!uploadedFile">
-                <div style="margin-bottom:0.5rem;"><SvgIcon name="completed" width="36" height="36" class="text-kin" /></div>
-                <div style="font-family:'Cormorant Garamond',serif; font-size:1.1rem; color:var(--color-sumi-700);">Klik atau seret file di sini</div>
-                <div style="font-size:0.78rem; color:var(--color-sumi-600); margin-top:0.25rem;">PNG, JPG, PDF · Maks 5MB</div>
-              </div>
-              <div v-else class="upload-preview">
-                <div><SvgIcon name="confirmed" width="32" height="32" class="text-matcha" /></div>
-                <div style="font-size:0.85rem; color:var(--color-matcha-600,#3D6B4E); font-weight:500;">{{ uploadedFile.name }}</div>
-                <button @click.stop="uploadedFile=null" class="remove-file">Hapus</button>
-              </div>
-            </div>
-            <div>
-              <label class="label-zen" style="margin-top:1rem; display:block;">Catatan (Opsional)</label>
-              <textarea class="input-zen" rows="2" v-model="notes" placeholder="Nama pengirim, catatan transfer..." style="resize:vertical;"/>
-            </div>
-          </div>
-
-          <!-- Submit -->
-          <button class="btn-vermillion confirm-pay-btn" @click="submitPayment" :disabled="!canSubmit">
-            <span v-if="!submitting">Konfirmasi Pembayaran</span>
-            <span v-else>⏳ Memproses...</span>
-          </button>
-          <p style="text-align:center; font-size:0.75rem; color:var(--color-sumi-600); margin-top:0.75rem; font-family:'Noto Serif JP',serif; display:flex; align-items:center; justify-content:center; gap:0.25rem;">
-            <SvgIcon name="key" width="11" height="11" /> Transaksi ini dilindungi dengan enkripsi SSL 256-bit
-          </p>
         </div>
       </div>
     </div>
@@ -131,7 +86,7 @@
           <div class="modal-header no-print">
             <div>
               <div class="modal-title">Nota Bukti Reservasi</div>
-              <div class="modal-subtitle">MIYABI OMOTENASHI INVOICE</div>
+              <div class="modal-subtitle">DARMA MIZUKI OMOTENASHI INVOICE</div>
             </div>
             <button @click="closeInvoice" class="modal-close">✕</button>
           </div>
@@ -192,10 +147,10 @@
               <!-- Stamp & Signature Block -->
               <div class="inv-bottom-row">
                 <div class="inv-hotel-details">
-                  <strong>MIYABI HOTEL</strong><br/>
+                  <strong>DARMA MIZUKI</strong><br/>
                   雅ホテル • Omotenashi Luxury<br/>
                   Jl. Sakura Indah No. 88, Jakarta Selatan<br/>
-                  hello@miyabihotel.com
+                  hello@darmamizuki.com
                 </div>
                 <div class="inv-stamp-area">
                   <!-- Red Japanese Stamp -->
@@ -225,10 +180,13 @@ import SvgIcon from '@/Components/UI/SvgIcon.vue'
 
 defineOptions({ layout: AppLayout })
 
-const bookingCode = Math.floor(Math.random() * 9000 + 1000)
-const selectedMethod = ref('bca')
-const uploadedFile = ref(null)
-const notes = ref('')
+const props = defineProps({
+  reservation: {
+    type: Object,
+    required: true
+  }
+})
+
 const submitting = ref(false)
 const showInvoiceModal = ref(false)
 const guestName = ref('Tamu Premium')
@@ -254,40 +212,73 @@ const countdownDisplay = computed(() => {
   return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
 })
 
-const paymentMethods = [
-  { id:'bca', name:'Transfer Bank BCA', desc:'Bank Central Asia', logoUrl:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40"><text x="50%" y="50%" font-family="Arial, sans-serif" font-weight="bold" font-style="italic" font-size="22" fill="%23003399" text-anchor="middle" dominant-baseline="central">BCA</text></svg>', accountNumber:'1234567890', accountName:'PT Arunika Ryoka Indonesia' },
-  { id:'bni', name:'Transfer Bank BNI', desc:'Bank Negara Indonesia', logoUrl:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40"><text x="50%" y="50%" font-family="Arial, sans-serif" font-style="italic" font-weight="bold" font-size="24" fill="%23005E6A" text-anchor="middle" dominant-baseline="central">BNI</text></svg>', accountNumber:'9876543210', accountName:'PT Arunika Ryoka Indonesia' },
-  { id:'mandiri', name:'Virtual Account Mandiri', desc:'Bayar via ATM / mobile banking', logoUrl:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40"><text x="50%" y="50%" font-family="Arial, sans-serif" font-weight="bold" font-size="20" fill="%230F4C81" text-anchor="middle" dominant-baseline="central">mandiri</text></svg>', accountNumber:'88801234567890', accountName:'Arunika Ryoka' },
-  { id:'gopay', name:'GoPay', desc:'Bayar via aplikasi Gojek', logoUrl:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40"><text x="50%" y="50%" font-family="Arial, sans-serif" font-weight="bold" font-size="20" fill="%2300AED6" text-anchor="middle" dominant-baseline="central">gopay</text></svg>', accountNumber: null },
-  { id:'ovo', name:'OVO', desc:'Bayar via aplikasi OVO', logoUrl:'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="40" viewBox="0 0 80 40"><text x="50%" y="50%" font-family="Arial, sans-serif" font-weight="bold" font-size="22" fill="%234C3494" text-anchor="middle" dominant-baseline="central">OVO</text></svg>', accountNumber: null },
-]
+const totalGrossAmount = computed(() => {
+  const sub = props.reservation.total_price
+  return sub + (sub * 0.11) + (sub * 0.05)
+})
 
-const currentMethod = computed(() => paymentMethods.find(m => m.id === selectedMethod.value))
-const canSubmit = computed(() => selectedMethod.value && (uploadedFile.value || ['gopay','ovo'].includes(selectedMethod.value)))
+const formatPrice = (price) => {
+  return Math.round(price).toLocaleString('id-ID')
+}
 
-const handleFile = (e) => { if (e.target.files[0]) uploadedFile.value = e.target.files[0] }
-const handleDrop = (e) => { if (e.dataTransfer.files[0]) uploadedFile.value = e.dataTransfer.files[0] }
-const copyAccount = () => { navigator.clipboard.writeText(currentMethod.value.accountNumber).catch(() => {}) }
+const formatDate = (dateStr) => {
+  return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(dateStr))
+}
 
-const submitPayment = () => {
-  if (!canSubmit.value) return
+const submitPayment = async () => {
   submitting.value = true
-  setTimeout(() => {
-    submitting.value = false
-    showInvoiceModal.value = true
 
-    // Save to admin notifications in localStorage
-    const notifItem = {
-      id: Date.now(),
-      text: `Tamu ${guestName.value} baru saja melakukan pemesanan Kamar Bamboo Deluxe! (Kode: MYB-${bookingCode.value})`,
-      timestamp: new Date().toISOString(),
-      read: false
+  try {
+    const response = await fetch('/api/midtrans/snap-token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+      },
+      body: JSON.stringify({
+        reservation_id: props.reservation.id
+      })
+    })
+
+    const data = await response.json()
+
+    if (data.snap_token) {
+      window.snap.pay(data.snap_token, {
+        onSuccess: async function(result) {
+          // Panggil route local fallback agar email bisa dikirim meski tanpa webhook ngrok
+          await fetch('/api/midtrans/local-success', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+            },
+            body: JSON.stringify({ reservation_id: props.reservation.id, gross_amount: result.gross_amount })
+          });
+
+          submitting.value = false
+          showInvoiceModal.value = true
+        },
+        onPending: function(result) {
+          submitting.value = false
+          alert('Menunggu pembayaran diselesaikan...')
+        },
+        onError: function(result) {
+          submitting.value = false
+          alert('Pembayaran gagal!')
+        },
+        onClose: function() {
+          submitting.value = false
+        }
+      })
+    } else {
+      submitting.value = false
+      alert('Gagal mendapatkan token pembayaran.')
     }
-    const rawNotifs = localStorage.getItem('miyabi_admin_notifications')
-    const notifs = rawNotifs ? JSON.parse(rawNotifs) : []
-    notifs.unshift(notifItem)
-    localStorage.setItem('miyabi_admin_notifications', JSON.stringify(notifs))
-  }, 1200)
+  } catch (error) {
+    submitting.value = false
+    console.error('Error fetching token:', error)
+    alert('Terjadi kesalahan jaringan.')
+  }
 }
 
 const closeInvoice = () => {

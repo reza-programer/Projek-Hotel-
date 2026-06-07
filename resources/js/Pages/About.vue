@@ -6,7 +6,7 @@
       <div class="about-hero-kanji" aria-hidden="true">雅</div>
       <div class="container-zen about-hero-content">
         <p class="section-kicker" style="color:var(--color-sakura-200)">アルニカ 旅館について</p>
-        <h1 class="about-hero-title">Tentang Arunika Ryoka</h1>
+        <h1 class="about-hero-title">Tentang Darma Mizuki</h1>
         <p class="about-hero-subtitle">Warisan keramahan Jepang yang hidup di jantung kota</p>
       </div>
     </section>
@@ -24,7 +24,7 @@
         <div class="story-text">
           <p class="section-kicker">私たちの物語</p>
           <h2 style="font-family:'Cormorant Garamond',serif; font-size:2.4rem; color:var(--color-sumi-800); margin-bottom:1.25rem;">Kisah Kami</h2>
-          <p style="color:var(--color-sumi-600); line-height:1.9; margin-bottom:1rem;">Arunika Ryoka lahir pada tahun 2018 dari sebuah mimpi sederhana namun mendalam: menghadirkan jiwa ryokan Jepang di Indonesia. Didirikan oleh pasangan yang jatuh cinta dengan filosofi Omotenashi selama tinggal di Kyoto, hotel ini dibangun di atas fondasi ketulusan dan perhatian tanpa syarat.</p>
+          <p style="color:var(--color-sumi-600); line-height:1.9; margin-bottom:1rem;">Darma Mizuki lahir pada tahun 2018 dari sebuah mimpi sederhana namun mendalam: menghadirkan jiwa ryokan Jepang di Indonesia. Didirikan oleh pasangan yang jatuh cinta dengan filosofi Omotenashi selama tinggal di Kyoto, hotel ini dibangun di atas fondasi ketulusan dan perhatian tanpa syarat.</p>
           <p style="color:var(--color-sumi-600); line-height:1.9; margin-bottom:1rem;">Setiap sudut hotel mencerminkan "wabi-sabi" — keindahan dalam kesederhanaan. Dari taman batu yang dirancang oleh maestro zen dari Nara, hingga koleksi sake premium dari berbagai prefektur Jepang, semua hadir untuk menciptakan pengalaman yang tak terlupakan.</p>
           <div class="story-badge">
             <span>✦</span> Berdiri sejak 2018
