@@ -37,7 +37,26 @@
     <section class="pattern-washi rooms-list-section">
       <div class="container-zen">
         <div class="rooms-grid" :class="viewMode">
-          <div v-for="room in filteredRooms" :key="room.id" class="room-card card-shoji">
+          <!-- Skeleton Loading -->
+          <template v-if="isLoading">
+            <div v-for="n in 6" :key="`skeleton-${n}`" class="room-card card-shoji">
+              <Skeleton variant="image" height="200px" />
+              <div class="room-body">
+                <Skeleton variant="text" width="60%" height="24px" style="margin-bottom: 0.5rem" />
+                <Skeleton variant="text" width="40%" height="16px" style="margin-bottom: 0.75rem" />
+                <Skeleton variant="text" width="100%" height="14px" style="margin-bottom: 0.5rem" />
+                <Skeleton variant="text" width="80%" height="14px" style="margin-bottom: 1rem" />
+                <div style="display: flex; gap: 0.5rem; margin-top: auto;">
+                  <Skeleton variant="button" width="100%" height="40px" />
+                  <Skeleton variant="button" width="100px" height="40px" />
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <!-- Actual Room Cards -->
+          <template v-else>
+            <div v-for="room in filteredRooms" :key="room.id" class="room-card card-shoji">
             <!-- Image -->
             <div class="room-img" :style="room.images && room.images.length > 0 ? { backgroundImage: `url(${room.images[0]})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { background: gradient(room.colorTheme) }">
               <div style="position: absolute; top: 0.8rem; left: 0.8rem; display: flex; gap: 0.5rem; z-index: 2;">
@@ -89,7 +108,8 @@
                 </Link>
               </div>
             </div>
-          </div>
+            </div>
+          </template>
         </div>
 
         <!-- Empty -->
@@ -104,17 +124,26 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import AppLayout from '@/Components/Layout/AppLayout.vue'
+import Skeleton from '@/Components/UI/Skeleton.vue'
 import { formatCurrency } from '@/data/mockData'
 import { rooms } from '@/data/roomsStore'
 
 defineOptions({ layout: AppLayout })
 
+const isLoading = ref(true)
 const selectedType = ref('Semua')
 const viewMode = ref('grid3')
 const roomTypes = ['Semua', 'Standard', 'Superior', 'Deluxe', 'Junior Suite', 'Suite', 'Presidential']
+
+// Simulate loading
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 800)
+})
 
 const filteredRooms = computed(() =>
   selectedType.value === 'Semua' ? rooms.value : rooms.value.filter(r => r.type === selectedType.value)

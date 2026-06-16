@@ -1,5 +1,26 @@
 <template>
   <div class="admin-dashboard-page">
+    <!-- Skeleton Loading -->
+    <div v-if="isLoading" class="skeleton-dashboard">
+      <div class="stats-grid">
+        <div v-for="n in 4" :key="n" class="stat-card-zen card-shoji">
+          <Skeleton variant="circle" width="56px" height="56px" />
+          <div style="flex: 1">
+            <Skeleton variant="text" width="60%" height="16px" style="margin-bottom: 0.5rem" />
+            <Skeleton variant="text" width="40%" height="24px" />
+            <Skeleton variant="text" width="50%" height="14px" style="margin-top: 0.25rem" />
+          </div>
+        </div>
+      </div>
+      <div class="dashboard-middle-row">
+        <Skeleton variant="card" height="300px" />
+        <Skeleton variant="card" height="300px" />
+      </div>
+      <Skeleton variant="card" height="200px" />
+    </div>
+
+    <!-- Actual Content -->
+    <template v-else>
     <!-- Top Stats Row -->
     <div class="stats-grid">
       <div class="stat-card-zen card-shoji">
@@ -158,15 +179,27 @@
         </table>
       </div>
     </div>
+    </template>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import AdminLayout from '@/Components/Layout/AdminLayout.vue'
 import SvgIcon from '@/Components/UI/SvgIcon.vue'
+import Skeleton from '@/Components/UI/Skeleton.vue'
 import { adminStats, revenueData, reservations, formatCurrency, statusConfig } from '@/data/mockData'
 
 defineOptions({ layout: AdminLayout })
+
+const isLoading = ref(true)
+
+// Simulate loading
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 700)
+})
 
 const formatDateShort = (dateStr) => {
   return new Intl.DateTimeFormat('id-ID', {

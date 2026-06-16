@@ -51,7 +51,7 @@
               <input v-model="form.remember" type="checkbox" />
               <span>Ingat Saya</span>
             </label>
-            <a href="#" class="forgot-link" @click.prevent="forgotPassword">Lupa Sandi?</a>
+            <Link href="/forgot-password" class="forgot-link">Lupa Sandi?</Link>
           </div>
 
           <button type="submit" class="btn-vermillion w-full" :disabled="loading">
@@ -93,7 +93,7 @@
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import SvgIcon from '@/Components/UI/SvgIcon.vue'
-import { users } from '@/data/mockData'
+import axios from 'axios'
 
 const loading = ref(false)
 const errorMessage = ref('')
@@ -115,53 +115,38 @@ const petals = Array.from({ length: 10 }, (_, i) => ({
   opacity: (0.3 + Math.random() * 0.4).toFixed(2),
 }))
 
-const handleLogin = () => {
+const handleLogin = async () => {
   loading.value = true
   errorMessage.value = ''
 
-  setTimeout(() => {
-    // Search mock credentials
-    const foundUser = users.find(u => u.email.toLowerCase() === form.value.email.toLowerCase())
+  try {
+    const response = await axios.post('/login', {
+      email: form.value.email,
+      password: form.value.password,
+      remember: form.value.remember
+    })
+
+    // Show loading screen and delay redirect
+    loginSuccess.value = true
     
-    if (foundUser) {
-      if (foundUser.status === 'inactive') {
-        errorMessage.value = 'Akun Anda sedang dinonaktifkan (suspended). Hubungi admin.'
-        loading.value = false
-        return
-      }
-
-      // Save user login state in localstorage
-      localStorage.setItem('miyabi_user', JSON.stringify({
-        id: foundUser.id,
-        name: foundUser.name,
-        email: foundUser.email,
-        role: foundUser.role
-      }))
-
-      // Save toast message in session storage
-      sessionStorage.setItem('miyabi_flash', JSON.stringify({
-        message: `Selamat datang kembali, ${foundUser.name}!`,
-        type: 'success'
-      }))
-
-      // Show loading screen and delay redirect
-      loginSuccess.value = true
-      setTimeout(() => {
-        if (foundUser.role === 'admin') {
-          window.location.href = '/admin/dashboard'
-        } else {
-          window.location.href = '/'
-        }
-      }, 1500)
+    // Attempt to fetch current user data if needed, or just redirect
+    // Since we don't have an easy way to check role from frontend yet, we'll just redirect to home
+    // Laravel will handle redirecting admin vs user if needed (though typically we just send them to dashboard/home)
+    
+    setTimeout(() => {
+      window.location.href = '/' // Let the backend routing handle any specific logic, or just go to home
+    }, 1500)
+    
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.errors) {
+      const errors = error.response.data.errors
+      const firstKey = Object.keys(errors)[0]
+      errorMessage.value = errors[firstKey][0]
     } else {
       errorMessage.value = 'Email tidak terdaftar atau kata sandi salah.'
-      loading.value = false
     }
-  }, 1000)
-}
-
-const forgotPassword = () => {
-  alert('Simulasi reset kata sandi dikirim ke email Anda.')
+    loading.value = false
+  }
 }
 </script>
 

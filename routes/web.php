@@ -36,7 +36,7 @@ Route::prefix('kamar')->name('rooms.')->group(function () {
 });
 
 // Booking
-Route::prefix('booking')->name('booking.')->group(function () {
+Route::prefix('booking')->name('booking.')->middleware('auth')->group(function () {
     Route::get('/buat', function () {
         return Inertia::render('Booking/Create');
     })->name('create');
@@ -66,18 +66,7 @@ Route::prefix('booking')->name('booking.')->group(function () {
             return back()->withErrors(['room' => 'Mohon maaf, kamar ini sudah dipesan/dibayar pada tanggal tersebut. Silakan pilih tanggal atau kamar lain.']);
         }
 
-        $user = null;
-        if (\Illuminate\Support\Facades\Auth::check()) {
-            $user = \Illuminate\Support\Facades\Auth::user();
-        } else {
-            $user = \App\Models\User::firstOrCreate(
-                ['email' => $validated['email']],
-                [
-                    'name' => $validated['guest_name'],
-                    'password' => \Illuminate\Support\Facades\Hash::make(\Illuminate\Support\Str::random(16))
-                ]
-            );
-        }
+        $user = \Illuminate\Support\Facades\Auth::user();
         $user_id = $user->id;
 
         $reservation = \App\Models\Reservation::create([
@@ -133,13 +122,41 @@ Route::post('/api/midtrans/local-success', function (\Illuminate\Http\Request $r
 });
 
 // Authentication
+use App\Http\Controllers\AuthController;
+
 Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->name('login');
 
+Route::post('/login', [AuthController::class, 'login']);
+
 Route::get('/register', function () {
     return Inertia::render('Auth/Register');
 })->name('register');
+
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::get('/verify-otp', function () {
+    return Inertia::render('Auth/VerifyOtp');
+})->name('verify-otp');
+
+Route::post('/verify-otp', [AuthController::class, 'verifyOtp']);
+
+// Password Reset
+use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\NewPasswordController;
+
+Route::get('/forgot-password', [PasswordResetLinkController::class, 'create'])
+    ->name('password.request');
+
+Route::post('/forgot-password', [PasswordResetLinkController::class, 'store'])
+    ->name('password.email');
+
+Route::get('/reset-password/{token}', [NewPasswordController::class, 'create'])
+    ->name('password.reset');
+
+Route::post('/reset-password', [NewPasswordController::class, 'store'])
+    ->name('password.update');
 
 // Google Authentication Routes
 use App\Http\Controllers\Auth\GoogleAuthController;

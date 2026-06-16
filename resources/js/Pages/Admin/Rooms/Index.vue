@@ -222,6 +222,7 @@
           </form>
         </div>
       </div>
+    </Transition>
     <!-- Delete Confirmation Modal -->
     <Transition name="modal">
       <div v-if="showDeleteModal" class="modal-overlay" @click.self="showDeleteModal=false">

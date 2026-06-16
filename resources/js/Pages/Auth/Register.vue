@@ -103,6 +103,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import axios from 'axios'
 import SvgIcon from '@/Components/UI/SvgIcon.vue'
 
 const loading = ref(false)
@@ -126,7 +127,7 @@ const petals = Array.from({ length: 10 }, (_, i) => ({
   opacity: (0.3 + Math.random() * 0.4).toFixed(2),
 }))
 
-const handleRegister = () => {
+const handleRegister = async () => {
   errorMessage.value = ''
 
   // Validate passwords match
@@ -143,22 +144,30 @@ const handleRegister = () => {
 
   loading.value = true
 
-  setTimeout(() => {
-    // Save simulated registered user status in localstorage
-    localStorage.setItem('miyabi_user', JSON.stringify({
-      id: Date.now(),
+  try {
+    const response = await axios.post('/register', {
       name: form.value.name,
       email: form.value.email,
-      role: 'user'
-    }))
-
-    // Save toast message in session storage
-    sessionStorage.setItem('miyabi_flash', JSON.stringify({
-      message: `Registrasi Darma Mizuki Club berhasil! Selamat bergabung, ${form.value.name}.`,
-      type: 'success'
-    }))
-    window.location.href = '/'
-  }, 1200)
+      password: form.value.password,
+      password_confirmation: form.value.password_confirmation
+    })
+    
+    // Simpan email sementara di session storage untuk halaman OTP
+    sessionStorage.setItem('miyabi_pending_email', form.value.email)
+    
+    // Redirect ke halaman verifikasi
+    window.location.href = '/verify-otp'
+  } catch (error) {
+    if (error.response && error.response.data && error.response.data.errors) {
+      // Get the first error message
+      const errors = error.response.data.errors
+      const firstKey = Object.keys(errors)[0]
+      errorMessage.value = errors[firstKey][0]
+    } else {
+      errorMessage.value = 'Terjadi kesalahan saat menghubungi server.'
+    }
+    loading.value = false
+  }
 }
 </script>
 

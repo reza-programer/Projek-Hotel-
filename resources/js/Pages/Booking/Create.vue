@@ -3,6 +3,21 @@
     <div class="container-zen booking-layout">
       <!-- Left: Form -->
       <div class="booking-form-area">
+        <!-- Skeleton Loading -->
+        <div v-if="isLoading" class="skeleton-wrapper">
+          <div class="skeleton-steps">
+            <Skeleton v-for="n in 3" :key="n" variant="circle" width="38px" height="38px" />
+          </div>
+          <Skeleton variant="card" height="200px" style="margin-bottom: 1.5rem" />
+          <div class="form-grid">
+            <Skeleton variant="text" height="40px" />
+            <Skeleton variant="text" height="40px" />
+          </div>
+          <Skeleton variant="text" height="100px" style="margin-top: 1rem" />
+        </div>
+
+        <!-- Actual Content -->
+        <template v-else>
         <!-- Step Indicator -->
         <div class="step-indicator">
           <div v-for="(s, i) in steps" :key="s.title" class="step-item">
@@ -178,6 +193,7 @@
             {{ submitting ? 'Memproses...' : 'Konfirmasi & Bayar' }}
           </button>
         </div>
+        </template>
       </div>
 
       <!-- Right: Summary -->
@@ -217,24 +233,38 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
-import { Link, router } from '@inertiajs/vue3'
+import { Link, router, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Components/Layout/AppLayout.vue'
+import Skeleton from '@/Components/UI/Skeleton.vue'
 import { formatCurrency } from '@/data/mockData'
 import { rooms } from '@/data/roomsStore'
 import DatePicker from '@/Components/UI/DatePicker.vue'
 
 defineOptions({ layout: AppLayout })
 
+const page = usePage()
+const user = page.props.auth.user
+
+const isLoading = ref(true)
 const today = new Date().toISOString().split('T')[0]
 const currentStep = ref(1)
 const submitting = ref(false)
+
+// Simulate loading
+onMounted(() => {
+  setTimeout(() => {
+    isLoading.value = false
+  }, 600)
+})
 
 const form = ref({
   room: rooms.value[0],
   checkIn: '', checkOut: '',
   adults: 2, children: 0,
   specialRequest: '',
-  guestName: '', email: '', phone: '', idNumber: '',
+  guestName: user ? user.name : '', 
+  email: user ? user.email : '', 
+  phone: '', idNumber: '',
   country: 'ID', arrivalTime: '14:00',
   notes: '', agreeTerms: false,
 })
@@ -317,6 +347,10 @@ const kanji = (t) => ({sakura:'桜',matcha:'竹',gold:'雅',ai:'鯉',beni:'紅'}
 <style scoped>
 .booking-page { min-height:100vh; padding:6rem 0 4rem; }
 .booking-layout { display:grid; grid-template-columns:1fr 340px; gap:2rem; align-items:start; padding-top:2rem; }
+
+/* Skeleton Loading */
+.skeleton-wrapper { padding: 1rem 0; }
+.skeleton-steps { display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; }
 
 /* Step indicator */
 .step-indicator { display:flex; align-items:flex-start; justify-content:center; gap:0; margin-bottom:2.5rem; }
