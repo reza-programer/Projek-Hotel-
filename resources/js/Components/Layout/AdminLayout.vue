@@ -351,8 +351,8 @@ onUnmounted(() => {
 .notif-item-text { font-size:0.78rem; color:var(--color-sumi-800); line-height:1.4; text-align:left; }
 .notif-item.unread .notif-item-text { font-weight:600; }
 .notif-item-time { font-size:0.65rem; color:var(--color-sumi-500); display:block; margin-top:3px; text-align:left; }
-.header-back-hotel { display:flex; align-items:center; gap:0.4rem; padding:0.4rem 0.9rem; border-radius:6px; border:1px solid rgba(201,168,76,0.3); color:var(--color-kin-500); font-size:0.78rem; text-decoration:none; font-family:'Inter',sans-serif; transition:0.2s; }
-.header-back-hotel:hover { background:var(--color-kin-500); color:#fff; }
+.header-back-hotel { display:flex; align-items:center; gap:0.4rem; padding:0.5rem 1rem; border-radius:6px; background:var(--color-beni-600); color:#fff; font-size:0.78rem; text-decoration:none; font-family:'Inter',sans-serif; font-weight:500; transition:0.2s; border:none; box-shadow:0 2px 4px rgba(155,35,53,0.15); }
+.header-back-hotel:hover { background:var(--color-beni-700); box-shadow:0 3px 6px rgba(155,35,53,0.25); transform:translateY(-1px); }
 
 .admin-content { padding:1.75rem; flex:1; }
 

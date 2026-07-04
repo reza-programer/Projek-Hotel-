@@ -16,7 +16,13 @@
       <div class="show-left">
         <!-- Gallery -->
         <div class="gallery">
-          <div class="gallery-main" :style="room.images && room.images.length > 0 ? { backgroundImage: `url(${room.images[activeImageIndex]})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { background: gradient(room.colorTheme) }">
+          <div class="gallery-main" :style="!room.images || room.images.length === 0 ? { background: gradient(room.colorTheme) } : {}">
+            <template v-if="room.images && room.images.length > 0">
+              <div v-for="(img, idx) in room.images" :key="idx" class="gallery-slide" :class="{ active: activeImageIndex === idx }"
+                :style="{ backgroundImage: `url(${img})`, backgroundSize: 'cover', backgroundPosition: 'center' }"
+                @mouseenter="stopCarousel"
+                @mouseleave="startCarousel"></div>
+            </template>
             <div v-if="!room.images || room.images.length === 0" class="gallery-main-kanji">{{ kanji(room.colorTheme) }}</div>
             <div class="gallery-main-overlay">
               <span class="room-type-badge">{{ room.type }}</span>
@@ -231,10 +237,29 @@ const room = computed(() => rooms.value.find(r => r.id == props.roomId) || rooms
 const relatedRooms = computed(() => rooms.value.filter(r => r.id !== room.value.id).slice(0, 3))
 
 const activeImageIndex = ref(0)
+const carouselInterval = ref(null)
 
 watch(() => room.value.id, () => {
   activeImageIndex.value = 0
+  stopCarousel()
+  startCarousel()
 })
+
+const startCarousel = () => {
+  stopCarousel()
+  if (room.value.images && room.value.images.length > 1) {
+    carouselInterval.value = setInterval(() => {
+      activeImageIndex.value = (activeImageIndex.value + 1) % room.value.images.length
+    }, 3500)
+  }
+}
+
+const stopCarousel = () => {
+  if (carouselInterval.value) {
+    clearInterval(carouselInterval.value)
+    carouselInterval.value = null
+  }
+}
 
 const today = new Date().toISOString().split('T')[0]
 const bookForm = ref({ checkIn: '', checkOut: '', guests: 2 })
@@ -273,6 +298,16 @@ const thumbColors = {
   ai:     ['#1A3060,#2C4A8C','#0E1A2E,#1A3060','#2C4A8C,#4A6AB0'],
   beni:   ['#7A1C28,#B83347','#2E0E0E,#7A1C28','#B83347,#D46075'],
 }
+
+import { onMounted, onUnmounted } from 'vue'
+
+onMounted(() => {
+  startCarousel()
+})
+
+onUnmounted(() => {
+  stopCarousel()
+})
 </script>
 
 <style scoped>
@@ -290,6 +325,8 @@ const thumbColors = {
 
 .gallery { display:flex; flex-direction:column; gap:0.75rem; }
 .gallery-main { height:360px; border-radius:4px; position:relative; overflow:hidden; }
+.gallery-slide { position:absolute; inset:0; background-repeat:no-repeat; background-size:cover; background-position:center; transition:opacity 0.9s cubic-bezier(0.2,0.9,0.2,1), transform 0.9s cubic-bezier(0.2,0.9,0.2,1); opacity:0; transform:scale(1); }
+.gallery-slide.active { opacity:1; transform:scale(1.02); }
 .gallery-main-kanji { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-family:'Noto Serif JP',serif; font-size:8rem; font-weight:700; color:rgba(255,255,255,0.07); }
 .gallery-main-overlay { position:absolute; inset:0; display:flex; justify-content:space-between; align-items:flex-start; padding:1rem; }
 .room-type-badge { background:rgba(26,26,46,0.75); color:var(--color-kin-300); font-size:0.72rem; letter-spacing:0.12em; padding:0.3rem 0.75rem; border-radius:2px; font-family:'Noto Serif JP',serif; backdrop-filter:blur(4px); }

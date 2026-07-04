@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'api/midtrans/webhook',
             'api/midtrans/snap-token',
         ]);
+        $middleware->alias([
+            'admin' => \App\Http\Middleware\IsAdmin::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

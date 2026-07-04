@@ -736,4 +736,124 @@ onUnmounted(() => {
   letter-spacing: 0.05em;
   margin-top: 3px;
 }
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .admin-chat-container {
+    height: calc(100vh - 100px);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-chat-container {
+    height: calc(100vh - 80px);
+    flex-direction: column;
+  }
+
+  .chat-threads-sidebar {
+    width: 100%;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.2);
+  }
+
+  .active-chat-window {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .chat-window-header {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .header-status-indicator {
+    display: none;
+  }
+
+  .chat-messages-area {
+    padding: 1rem;
+  }
+
+  .msg-bubble {
+    max-width: 85%;
+  }
+
+  .chat-window-footer {
+    padding: 0.75rem 1rem;
+  }
+
+  .reply-form {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .reply-send-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sidebar-search-area {
+    padding: 1rem;
+  }
+
+  .sidebar-title {
+    font-size: 1rem;
+  }
+
+  .thread-item {
+    padding: 0.75rem 1rem;
+  }
+
+  .avatar-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .zen-card {
+    padding: 2rem 1.5rem;
+    max-width: 100%;
+  }
+
+  .zen-symbol {
+    font-size: 2.5rem;
+  }
+
+  .zen-title {
+    font-size: 1.2rem;
+  }
+
+  .stats-row {
+    gap: 1.5rem;
+  }
+
+  .stat-val {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-threads-sidebar {
+    height: 180px;
+  }
+
+  .thread-name {
+    font-size: 0.8rem;
+  }
+
+  .thread-preview {
+    font-size: 0.7rem;
+  }
+
+  .msg-text {
+    font-size: 0.78rem;
+  }
+
+  .reply-textarea {
+    font-size: 0.8rem;
+  }
+}
 </style>

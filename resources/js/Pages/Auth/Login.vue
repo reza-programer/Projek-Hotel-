@@ -128,13 +128,12 @@ const handleLogin = async () => {
 
     // Show loading screen and delay redirect
     loginSuccess.value = true
-    
-    // Attempt to fetch current user data if needed, or just redirect
-    // Since we don't have an easy way to check role from frontend yet, we'll just redirect to home
-    // Laravel will handle redirecting admin vs user if needed (though typically we just send them to dashboard/home)
-    
+
+    // Check if backend provides redirect URL (for admin)
+    const redirectUrl = response.data.redirect || '/'
+
     setTimeout(() => {
-      window.location.href = '/' // Let the backend routing handle any specific logic, or just go to home
+      window.location.href = redirectUrl
     }, 1500)
     
   } catch (error) {

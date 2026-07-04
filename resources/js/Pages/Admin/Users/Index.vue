@@ -6,7 +6,7 @@
         <h1 class="page-title" style="display:flex; align-items:center; gap:0.4rem;"><SvgIcon name="users" /> Manajemen Pengguna</h1>
         <p class="page-subtitle">Kelola hak akses admin, profile pengguna terdaftar, dan status akun.</p>
       </div>
-      <button @click="openCreateModal" class="btn-vermillion">
+      <button @click="openCreateModal" class="btn-vermillion btn-sm">
         <span>+</span> Tambah Akun Pengguna
       </button>
     </div>
@@ -318,5 +318,14 @@ const deleteUser = (id) => {
   .filters-card { flex-direction:column; align-items:stretch; }
   .filter-options { flex-direction:column; }
   .select-filter { width:100%; }
+  .page-header-flex { flex-direction:column; align-items:flex-start; gap:1rem; }
+  .btn-sm { width:100%; }
+}
+
+/* Small button variant */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  height: auto;
 }
 </style>

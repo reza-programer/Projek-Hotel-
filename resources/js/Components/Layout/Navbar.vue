@@ -6,7 +6,6 @@
       <Link href="/" class="navbar-logo">
         <span class="logo-kanji">阿</span>
         <span class="logo-text">DARMA MIZUKI</span>
-        <span class="logo-sub">RYOKA</span>
       </Link>
 
       <!-- Desktop Nav -->

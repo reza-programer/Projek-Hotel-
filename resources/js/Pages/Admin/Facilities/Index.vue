@@ -6,7 +6,7 @@
         <h1 class="page-title" style="display:flex; align-items:center; gap:0.4rem;"><SvgIcon name="facilities" /> Laporan Fasilitas</h1>
         <p class="page-subtitle">Kelola fasilitas hotel, ikon, kategori, dan status operasional.</p>
       </div>
-      <button @click="openCreateModal" class="btn-vermillion">
+      <button @click="openCreateModal" class="btn-vermillion btn-sm">
         <span>+</span> Tambah Fasilitas Baru
       </button>
     </div>
@@ -322,5 +322,14 @@ input:checked + .slider:before { transform:translateX(14px); }
   .filter-options { flex-direction:column; }
   .select-filter { width:100%; }
   .form-grid-2 { grid-template-columns:1fr; gap:0.5rem; margin-bottom:0.5rem; }
+  .page-header-flex { flex-direction:column; align-items:flex-start; gap:1rem; }
+  .btn-sm { width:100%; }
+}
+
+/* Small button variant */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  height: auto;
 }
 </style>

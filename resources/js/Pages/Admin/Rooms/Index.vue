@@ -6,7 +6,7 @@
         <h1 class="page-title" style="display:flex; align-items:center; gap:0.4rem;"><SvgIcon name="rooms" /> Manajemen Kamar</h1>
         <p class="page-subtitle">Kelola daftar kamar hotel, harga, kapasitas, dan ketersediaan.</p>
       </div>
-      <button @click="openCreateModal" class="btn-vermillion">
+      <button @click="openCreateModal" class="btn-vermillion btn-sm">
         <span>+</span> Tambah Kamar Baru
       </button>
     </div>
@@ -513,6 +513,15 @@ const confirmDelete = () => {
   .filter-options { flex-direction:column; }
   .select-filter { width:100%; }
   .form-grid-2, .form-grid-3 { grid-template-columns:1fr; gap:0.5rem; margin-bottom:0.5rem; }
+  .page-header-flex { flex-direction:column; align-items:flex-start; gap:1rem; }
+  .btn-sm { width:100%; }
+}
+
+/* Small button variant */
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  height: auto;
 }
 
 /* Image upload styles */

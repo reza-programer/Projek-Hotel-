@@ -231,7 +231,7 @@ Route::get('/api/kamar/{id}/tanggal-penuh', function ($id) {
 // ADMIN ROUTES
 // ============================================
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
 
     // Dashboard
     Route::get('/dashboard', function () {
